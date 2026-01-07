@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  /* Default Cyberpunk Theme */
+  --primary-color: #a855f7; /* Purple-500 */
+  --secondary-color: #22d3ee; /* Cyan-400 */
+  --accent-color: #4ade80; /* Green-400 */
+  --bg-color: #050505;
+  --text-color: #ffffff;
+}
+
+body {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Line clamp utility */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
