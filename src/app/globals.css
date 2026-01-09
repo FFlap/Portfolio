@@ -12,6 +12,7 @@
 body {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   background-color: var(--bg-color);
+  background-image: radial-gradient(circle at center, #111111 0%, #050505 100%);
   color: var(--text-color);
   margin: 0;
   overflow-x: hidden;

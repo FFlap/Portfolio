@@ -3,6 +3,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ModalProvider } from "@/hooks/useModal";
 import { ThemeProvider } from "@/hooks/useTheme";
+import { ThreeModeProvider } from "@/hooks/useThreeMode";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
@@ -24,7 +25,9 @@ export default function RootLayout({
       <body className={`${jetbrainsMono.variable} antialiased`}>
         <ThemeProvider>
           <ModalProvider>
-            {children}
+            <ThreeModeProvider>
+              {children}
+            </ThreeModeProvider>
           </ModalProvider>
         </ThemeProvider>
       </body>
