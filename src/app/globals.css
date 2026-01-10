@@ -1,37 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  /* Default Cyberpunk Theme */
-  --primary-color: #a855f7; /* Purple-500 */
-  --secondary-color: #22d3ee; /* Cyan-400 */
-  --accent-color: #4ade80; /* Green-400 */
-  --bg-color: #050505;
-  --text-color: #ffffff;
+  --bg-primary: #27272a;
+  --bg-secondary: #1f1f23;
+  --bg-tertiary: #18181b;
+  --text-primary: #f5f5f4;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --border: #3f3f46;
+
+  /* Theme colors - defaults to purple */
+  --primary-color: #a78bfa;
+  --secondary-color: #67e8f9;
+  --accent-color: #f59e0b;
 }
 
 body {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  background-color: var(--bg-color);
-  background-image: radial-gradient(circle at center, #111111 0%, #050505 100%);
-  color: var(--text-color);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   margin: 0;
   overflow-x: hidden;
-  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-/* Custom Scrollbar */
+/* Minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--bg-color);
+  background: var(--bg-primary);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
+  background: var(--border);
+  border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #404040;
 }
 
 /* Line clamp utility */
@@ -42,16 +49,32 @@ body {
   overflow: hidden;
 }
 
-/* Fade in animation */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Font utilities */
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
 }
 
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out;
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+/* Theme-aware utilities */
+.text-theme {
+  color: var(--primary-color);
+}
+
+.hover\:text-theme:hover {
+  color: var(--primary-color);
+}
+
+.border-theme {
+  border-color: var(--primary-color);
+}
+
+.hover\:border-theme:hover {
+  border-color: var(--primary-color);
+}
+
+.bg-theme {
+  background-color: var(--primary-color);
 }

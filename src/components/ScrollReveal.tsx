@@ -32,15 +32,16 @@ export default function ScrollReveal({
 
     let startProps: gsap.TweenVars = { opacity: 0 };
 
+    // Subtler animations - reduced movement
     switch (type) {
       case 'fade-up':
-        startProps.y = 50;
+        startProps.y = 20;
         break;
       case 'slide-left':
-        startProps.x = -50;
+        startProps.x = -20;
         break;
       case 'slide-right':
-        startProps.x = 50;
+        startProps.x = 20;
         break;
       case 'fade-in':
       default:
@@ -53,9 +54,9 @@ export default function ScrollReveal({
         opacity: 1,
         x: 0,
         y: 0,
-        duration,
+        duration: duration * 0.6, // Faster, subtler
         delay,
-        ease: 'power3.out',
+        ease: 'power2.out',
         scrollTrigger: {
           trigger: element,
           start: 'top 85%',

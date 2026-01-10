@@ -30,9 +30,9 @@ export default function Home() {
         <Projects />
 
         {/* Footer */}
-        <footer className="py-8 text-center text-gray-500 text-sm relative z-10 bg-black/50 backdrop-blur-sm">
-          <p>Built with Next.js, Three.js, and TailwindCSS</p>
-          <p>&copy; 2025 Nathan Yan</p>
+        <footer className="py-12 text-center border-t border-neutral-800">
+          <p className="text-neutral-500 text-sm">Built with Next.js and TailwindCSS</p>
+          <p className="text-neutral-600 text-xs mt-1">&copy; 2025 Nathan Yan</p>
         </footer>
       </main>
 

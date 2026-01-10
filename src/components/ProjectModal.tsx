@@ -70,7 +70,7 @@ export default function ProjectModal() {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-opacity duration-200 ${
         project ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}
     >
@@ -78,11 +78,11 @@ export default function ProjectModal() {
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose}></div>
 
       {/* Modal Content */}
-      <div className="relative bg-gray-900 border border-purple-500/30 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl shadow-purple-500/20 flex flex-col">
+      <div className="relative bg-zinc-900 border border-zinc-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
         {/* Close Button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white z-10 p-2 bg-black/20 rounded-full transition-colors"
+          className="absolute top-4 right-4 text-neutral-400 hover:text-white z-10 p-2 transition-colors duration-200"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -90,12 +90,12 @@ export default function ProjectModal() {
         </button>
 
         <div className="p-6 md:p-8">
-          <h2 className="text-3xl font-bold text-white mb-2">{project.name}</h2>
-          <p className="text-purple-500 font-mono mb-6">{project.tech}</p>
+          <h2 className="text-3xl font-display font-bold text-white mb-2">{project.name}</h2>
+          <p className="text-theme font-mono mb-6" style={{ opacity: 0.8 }}>{project.tech}</p>
 
           {/* Media Gallery */}
           {totalSlides > 0 && (
-            <div className="relative mb-8 aspect-video bg-black rounded-lg overflow-hidden group border border-gray-800">
+            <div className="relative mb-8 aspect-video bg-black rounded-lg overflow-hidden group border border-neutral-800">
               {/* Video Slide */}
               {project.video && currentSlideIndex === 0 && (
                 <div className="w-full h-full">
@@ -133,7 +133,7 @@ export default function ProjectModal() {
                 <>
                   <button
                     onClick={prevSlide}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-purple-500/80 text-white p-2 rounded-full transition-colors z-10"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-neutral-800 hover:bg-neutral-700 text-white p-2 rounded-full transition-colors duration-200 z-10"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -141,7 +141,7 @@ export default function ProjectModal() {
                   </button>
                   <button
                     onClick={nextSlide}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-purple-500/80 text-white p-2 rounded-full transition-colors z-10"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-neutral-800 hover:bg-neutral-700 text-white p-2 rounded-full transition-colors duration-200 z-10"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
@@ -155,8 +155,8 @@ export default function ProjectModal() {
                 {Array.from({ length: totalSlides }).map((_, i) => (
                   <div
                     key={i}
-                    className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
-                      i === currentSlideIndex ? 'bg-purple-500' : 'bg-gray-600'
+                    className={`w-2 h-2 rounded-full transition-colors duration-200 cursor-pointer ${
+                      i === currentSlideIndex ? 'bg-theme' : 'bg-neutral-700'
                     }`}
                     onClick={() => {
                       setCurrentSlideIndex(i);
@@ -172,10 +172,10 @@ export default function ProjectModal() {
           <ul className="space-y-3 mb-8">
             {project.description.map((desc, index) => (
               <li key={index} className="flex items-start">
-                <span className="text-purple-500 mr-3 mt-2 flex-shrink-0">
-                  <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                <span className="mr-3 mt-2 flex-shrink-0">
+                  <div className="w-1.5 h-1.5 bg-neutral-600 rounded-full"></div>
                 </span>
-                <span className="text-gray-300 leading-relaxed">{desc}</span>
+                <span className="text-neutral-300 leading-relaxed">{desc}</span>
               </li>
             ))}
           </ul>
@@ -184,7 +184,7 @@ export default function ProjectModal() {
           <div className="flex justify-end">
             <button
               onClick={handleClose}
-              className="px-6 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded border border-gray-600 transition-colors"
+              className="px-6 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded border border-neutral-700 transition-colors duration-200"
             >
               Close
             </button>

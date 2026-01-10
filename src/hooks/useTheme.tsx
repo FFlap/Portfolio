@@ -11,34 +11,35 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+// Refined, muted color palettes for Swiss Precision aesthetic
 const themeColors = {
   purple: {
-    primary: '#a855f7',
-    secondary: '#22d3ee',
-    accent: '#4ade80',
-    bg: '#050505',
-    text: '#ffffff'
+    primary: '#a78bfa',    // softer purple
+    secondary: '#67e8f9',  // softer cyan
+    accent: '#f59e0b',     // amber accent
+    bg: '#27272a',
+    text: '#f5f5f4'
   },
   green: {
-    primary: '#22c55e',
-    secondary: '#15803d',
-    accent: '#ffffff',
-    bg: '#020c02',
-    text: '#4ade80'
+    primary: '#4ade80',
+    secondary: '#22c55e',
+    accent: '#f59e0b',
+    bg: '#27272a',
+    text: '#f5f5f4'
   },
   orange: {
-    primary: '#f97316',
-    secondary: '#eab308',
-    accent: '#f43f5e',
-    bg: '#1c1917',
-    text: '#fcd34d'
+    primary: '#fb923c',
+    secondary: '#fbbf24',
+    accent: '#f59e0b',
+    bg: '#27272a',
+    text: '#f5f5f4'
   },
   blue: {
-    primary: '#3b82f6',
-    secondary: '#06b6d4',
-    accent: '#f472b6',
-    bg: '#0f172a',
-    text: '#e0f2fe'
+    primary: '#60a5fa',
+    secondary: '#38bdf8',
+    accent: '#f59e0b',
+    bg: '#27272a',
+    text: '#f5f5f4'
   }
 };
 
