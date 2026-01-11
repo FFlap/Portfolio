@@ -120,7 +120,7 @@ Email: <a href="mailto:${contact.email}" class="text-theme hover:underline">${co
 
       {/* Profile Image (Left) */}
       <ScrollReveal type="slide-left" className="w-full md:w-5/12 flex justify-center">
-        <div className="w-64 md:w-72 rounded-2xl overflow-hidden border border-zinc-700 shadow-xl bg-zinc-900">
+        <div className="w-80 md:w-96 rounded-2xl overflow-hidden glass-panel">
           <img
             src="/assets/profile.jpg"
             alt="Nathan Yan"
@@ -131,12 +131,12 @@ Email: <a href="mailto:${contact.email}" class="text-theme hover:underline">${co
 
       {/* Terminal Interface (Right) */}
       <ScrollReveal type="slide-right" delay={0.2} className="w-full md:w-7/12 text-left">
-        <div className="bg-zinc-900 border border-zinc-700 rounded-lg overflow-hidden font-mono text-sm md:text-base shadow-xl">
+        <div className="glass-panel rounded-lg overflow-hidden font-mono text-sm md:text-base">
           {/* Terminal Header - Muted traffic lights */}
-          <div className="bg-zinc-900 px-4 py-3 flex items-center gap-2 border-b border-zinc-800">
-            <div className="w-3 h-3 rounded-full bg-neutral-700"></div>
-            <div className="w-3 h-3 rounded-full bg-neutral-700"></div>
-            <div className="w-3 h-3 rounded-full bg-neutral-700"></div>
+          <div className="bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#27c93f]"></div>
             <span className="ml-2 text-neutral-500 text-xs font-mono">~/portfolio</span>
           </div>
 

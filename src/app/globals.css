@@ -1,23 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #27272a;
-  --bg-secondary: #1f1f23;
-  --bg-tertiary: #18181b;
-  --text-primary: #f5f5f4;
+  /* Palette Hierarchy */
+  --bg-depth: #181C22;   /* Darkest - Main Background */
+  --bg-surface: #252A30; /* Lighter - Sections/Cards */
+  --bg-highlight: #76ABAE;
+  
+  --text-primary: #EEEEEE;
   --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
-  --border: #3f3f46;
+  --text-muted: #d4d4d8;
+  --border: #252A30;
 
-  /* Theme colors - defaults to purple */
-  --primary-color: #a78bfa;
-  --secondary-color: #67e8f9;
-  --accent-color: #f59e0b;
+  /* Theme colors - key accents */
+  --primary-color: #76ABAE;
+  --secondary-color: #76ABAE; /* Unified for now */
+  --accent-color: #76ABAE;
 }
 
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
-  background-color: var(--bg-primary);
+  background-color: var(--bg-depth);
   color: var(--text-primary);
   margin: 0;
   overflow-x: hidden;
@@ -29,16 +31,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--bg-depth);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--bg-tertiary);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #404040;
+  background: var(--bg-secondary);
 }
 
 /* Line clamp utility */
@@ -75,6 +77,12 @@ body {
   border-color: var(--primary-color);
 }
 
+
 .bg-theme {
   background-color: var(--primary-color);
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  @apply bg-[#252A30]/90 backdrop-blur-xl border border-white/10 shadow-xl;
 }

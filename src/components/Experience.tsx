@@ -15,7 +15,7 @@ export default function Experience() {
       </div>
 
       <div className="max-w-5xl mx-auto w-full">
-        <div className="bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl p-8 md:p-12">
+        <div className="glass-panel rounded-lg p-8 md:p-12">
           <div className="relative">
             <div className="space-y-12">
               {experience.map((job, i) => (
@@ -24,7 +24,7 @@ export default function Experience() {
                     {/* Connecting Line to Next Node */}
                     {i !== experience.length - 1 && (
                       <div
-                        className="absolute left-6 top-12 w-px bg-zinc-700 -z-10"
+                        className="absolute left-6 top-12 w-px bg-white/10 -z-10"
                         style={{ height: 'calc(100% + 3rem)' }}
                       ></div>
                     )}
@@ -34,7 +34,7 @@ export default function Experience() {
                       href={job.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="absolute left-0 top-0 w-12 h-12 bg-zinc-800 rounded-full border border-zinc-600 flex items-center justify-center z-20 group hover:border-theme transition-colors duration-200 overflow-hidden cursor-pointer"
+                      className="absolute left-0 top-0 w-12 h-12 bg-[var(--bg-surface)] rounded-full border border-zinc-700 flex items-center justify-center z-20 group hover:border-theme transition-colors duration-200 overflow-hidden cursor-pointer"
                     >
                       {job.logo ? (
                         <img src={job.logo} alt={`${job.company} logo`} className="w-full h-full object-cover" />
@@ -56,7 +56,7 @@ export default function Experience() {
                       </div>
 
                       <div className="text-neutral-500 text-sm mb-6 font-mono flex items-center gap-3">
-                        <span className="bg-zinc-800 px-2 py-1 rounded text-xs">{job.period}</span>
+                        <span className="bg-white/5 px-2 py-1 rounded text-xs">{job.period}</span>
                         <span>{job.location}</span>
                       </div>
 

@@ -56,8 +56,8 @@ export default function BackgroundScene() {
     }
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x050505);
-    scene.fog = new THREE.FogExp2(0x050505, 0.002);
+    scene.background = new THREE.Color(0x181C22);
+    scene.fog = new THREE.FogExp2(0x181C22, 0.002);
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
@@ -237,7 +237,7 @@ export default function BackgroundScene() {
   // Fallback CSS background when WebGL is not available
   if (!webGLSupported) {
     return (
-      <div className="fixed inset-0 z-0 pointer-events-none bg-[#050505]">
+      <div className="fixed inset-0 z-0 pointer-events-none bg-[#181C22]">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0" style={{
             backgroundImage: `radial-gradient(circle at 2px 2px, #00ff00 1px, transparent 0)`,

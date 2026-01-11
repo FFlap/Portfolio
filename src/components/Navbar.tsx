@@ -14,14 +14,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-black/70 backdrop-blur-sm border-b border-neutral-800/50 transition-all duration-200">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-[var(--bg-surface)]/80 backdrop-blur-sm border-b border-white/10 transition-all duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo / Brand */}
           <div className="flex-shrink-0 cursor-pointer" onClick={() => scrollToSection('home')}>
             <span className="text-xl font-medium text-white tracking-wide font-display">
-              NY
+              Nathan Yan
             </span>
           </div>
 
@@ -55,7 +55,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div className={`md:hidden ${isMenuOpen ? '' : 'hidden'}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-neutral-900/95 backdrop-blur-sm border-b border-neutral-800">
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[#4F4557]/95 backdrop-blur-sm border-b border-white/10">
           <button onClick={() => scrollToSection('home')} className="text-neutral-400 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200">Home</button>
           <button onClick={() => scrollToSection('projects')} className="text-neutral-400 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200">Projects</button>
           <button onClick={() => scrollToSection('experience')} className="text-neutral-400 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200">Experience</button>

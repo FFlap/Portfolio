@@ -78,7 +78,7 @@ export default function ProjectModal() {
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose}></div>
 
       {/* Modal Content */}
-      <div className="relative bg-zinc-900 border border-zinc-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
+      <div className="relative bg-[var(--bg-surface)] border border-white/10 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
         {/* Close Button */}
         <button
           onClick={handleClose}
@@ -90,7 +90,7 @@ export default function ProjectModal() {
         </button>
 
         <div className="p-6 md:p-8">
-          <h2 className="text-3xl font-display font-bold text-white mb-2">{project.name}</h2>
+          <h2 className="text-3xl font-display font-bold text-[var(--text-primary)] mb-2">{project.name}</h2>
           <p className="text-theme font-mono mb-6" style={{ opacity: 0.8 }}>{project.tech}</p>
 
           {/* Media Gallery */}
@@ -175,7 +175,7 @@ export default function ProjectModal() {
                 <span className="mr-3 mt-2 flex-shrink-0">
                   <div className="w-1.5 h-1.5 bg-neutral-600 rounded-full"></div>
                 </span>
-                <span className="text-neutral-300 leading-relaxed">{desc}</span>
+                <span className="text-[var(--text-primary)] leading-relaxed" style={{ opacity: 0.9 }}>{desc}</span>
               </li>
             ))}
           </ul>
@@ -184,7 +184,7 @@ export default function ProjectModal() {
           <div className="flex justify-end">
             <button
               onClick={handleClose}
-              className="px-6 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded border border-neutral-700 transition-colors duration-200"
+              className="px-6 py-2 bg-white/5 hover:bg-white/10 text-[var(--text-primary)] rounded border border-white/10 transition-colors duration-200"
             >
               Close
             </button>
