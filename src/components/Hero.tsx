@@ -49,6 +49,7 @@ export default function Hero() {
   - background <3d|simple>: Switch background mode
   - socials: List social media links
   - theme <name>: Change theme (purple, green, orange, blue)
+  - skills: Display technical skills
   - clear: Clear the terminal history`
         }]);
         break;
@@ -63,6 +64,18 @@ export default function Hero() {
           content: `GitHub: <a href="${contact.github}" target="_blank" class="text-theme hover:underline">${contact.github}</a>
 LinkedIn: <a href="${contact.linkedin}" target="_blank" class="text-theme hover:underline">${contact.linkedin}</a>
 Email: <a href="mailto:${contact.email}" class="text-theme hover:underline">${contact.email}</a>`
+        }]);
+        break;
+
+      case 'skills':
+        const { skills } = portfolioData;
+        const skillsOutput = skills.map(category => 
+          `<span class="text-theme font-bold">${category.name}:</span> ${category.skills.join(', ')}`
+        ).join('\n');
+        
+        setHistory(prev => [...prev, {
+          type: 'html',
+          content: skillsOutput
         }]);
         break;
 
