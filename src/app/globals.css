@@ -86,3 +86,27 @@ body {
 .glass-panel {
   @apply bg-[#252A30]/90 backdrop-blur-xl border border-white/10 shadow-xl;
 }
+
+/* Draggable Terminal Styles */
+.terminal-window {
+  z-index: 50;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.terminal-window:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+.terminal-drag-handle {
+  user-select: none;
+}
+
+/* React-rnd resize handle styling */
+.terminal-window > div[style*="cursor"] {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.terminal-window:hover > div[style*="cursor"] {
+  opacity: 1;
+}
