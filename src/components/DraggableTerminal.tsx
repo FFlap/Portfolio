@@ -7,12 +7,14 @@ interface DraggableTerminalProps {
   children: ReactNode;
   minWidth?: number;
   minHeight?: number;
+  title?: string;
 }
 
 export default function DraggableTerminal({
   children,
   minWidth = 400,
   minHeight = 300,
+  title = '~/portfolio',
 }: DraggableTerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -69,7 +71,7 @@ export default function DraggableTerminal({
           <div className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all" title="Close"></div>
           <div className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:brightness-110 cursor-pointer transition-all" title="Minimize"></div>
           <div className="w-3 h-3 rounded-full bg-[#27c93f] hover:brightness-110 cursor-pointer transition-all" title="Maximize"></div>
-          <span className="ml-2 text-neutral-500 text-xs font-mono">~/portfolio</span>
+          <span className="ml-2 text-neutral-500 text-xs font-mono">{title}</span>
         </div>
         <div className="overflow-hidden">
           {children}
@@ -153,7 +155,7 @@ export default function DraggableTerminal({
               onClick={handleMaximize}
               title={isMaximized ? "Restore" : "Maximize"}
             ></div>
-            <span className="ml-2 text-neutral-500 text-xs font-mono">~/portfolio</span>
+            <span className="ml-2 text-neutral-500 text-xs font-mono">{title}</span>
           </div>
 
           {/* Terminal Body */}

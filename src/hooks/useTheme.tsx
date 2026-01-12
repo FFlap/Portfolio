@@ -11,33 +11,33 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-// Refined, muted color palettes for Swiss Precision aesthetic
+// Distinct color palettes for each theme
 const themeColors = {
   purple: {
-    primary: '#76ABAE',
-    secondary: '#76ABAE',
-    accent: '#76ABAE',
+    primary: '#a855f7',
+    secondary: '#9333ea',
+    accent: '#c084fc',
     bg: '#181C22',
     text: '#EEEEEE'
   },
   green: {
     primary: '#4ade80',
     secondary: '#22c55e',
-    accent: '#f59e0b',
-    bg: '#393646',
-    text: '#F4EEE0'
+    accent: '#86efac',
+    bg: '#181C22',
+    text: '#EEEEEE'
   },
   orange: {
     primary: '#fb923c',
-    secondary: '#fbbf24',
-    accent: '#f59e0b',
-    bg: '#393646',
-    text: '#F4EEE0'
+    secondary: '#f97316',
+    accent: '#fdba74',
+    bg: '#181C22',
+    text: '#EEEEEE'
   },
   blue: {
     primary: '#76ABAE',
-    secondary: '#76ABAE',
-    accent: '#76ABAE',
+    secondary: '#5d9a9d',
+    accent: '#9fc5c7',
     bg: '#181C22',
     text: '#EEEEEE'
   }
