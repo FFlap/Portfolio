@@ -78,7 +78,7 @@ export default function BackgroundScene() {
 
     const material = new THREE.PointsMaterial({
       size: 0.02,
-      color: 0x00ff00,
+      color: 0xffffff,
       transparent: true,
       opacity: 0.6,
     });

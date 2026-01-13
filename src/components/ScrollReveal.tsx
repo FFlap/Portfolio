@@ -59,13 +59,20 @@ export default function ScrollReveal({
         ease: 'power2.out',
         scrollTrigger: {
           trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
+          start: 'top 140%',
+          toggleActions: 'play none none reverse',
+          invalidateOnRefresh: true
         }
       }
     );
 
+    // Refresh ScrollTrigger after a small delay to catch elements already in view
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+
     return () => {
+      clearTimeout(refreshTimer);
       animation.kill();
     };
   }, [type, delay, duration]);

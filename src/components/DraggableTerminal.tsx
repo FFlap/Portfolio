@@ -7,6 +7,7 @@ interface DraggableTerminalProps {
   children: ReactNode;
   minWidth?: number;
   minHeight?: number;
+  defaultHeight?: number;
   title?: string;
 }
 
@@ -14,6 +15,7 @@ export default function DraggableTerminal({
   children,
   minWidth = 400,
   minHeight = 300,
+  defaultHeight,
   title = '~/portfolio',
 }: DraggableTerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,16 +28,17 @@ export default function DraggableTerminal({
   const [isMaximized, setIsMaximized] = useState(false);
   const previousState = useRef({ size, position });
 
-  // Measure initial size after mount
+  // Measure initial size after mount (use defaultHeight if provided)
   useEffect(() => {
     if (contentRef.current && !mounted) {
       const rect = contentRef.current.getBoundingClientRect();
-      const measuredSize = { width: rect.width, height: rect.height };
+      const height = defaultHeight || rect.height;
+      const measuredSize = { width: rect.width, height };
       setInitialSize(measuredSize);
       setSize(measuredSize);
       setMounted(true);
     }
-  }, [mounted]);
+  }, [mounted, defaultHeight]);
 
   const handleMaximize = () => {
     if (isMaximized) {
@@ -159,7 +162,7 @@ export default function DraggableTerminal({
           </div>
 
           {/* Terminal Body */}
-          <div className="flex-1 overflow-auto">
+          <div className="flex-1 overflow-auto scrollbar-auto-hide">
             {children}
           </div>
         </div>
