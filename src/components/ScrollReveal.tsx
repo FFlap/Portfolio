@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, ReactNode } from 'react';
+import { ReactNode, useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -25,12 +25,20 @@ export default function ScrollReveal({
 }: ScrollRevealProps) {
   const elementRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!elementRef.current) return;
-
+  useLayoutEffect(() => {
     const element = elementRef.current;
+    if (!element) return;
 
-    let startProps: gsap.TweenVars = { opacity: 0 };
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      gsap.set(element, { opacity: 1, x: 0, y: 0 });
+      return;
+    }
+
+    const startProps: gsap.TweenVars = { opacity: 0 };
 
     // Subtler animations - reduced movement
     switch (type) {
@@ -48,7 +56,18 @@ export default function ScrollReveal({
         break;
     }
 
-    const animation = gsap.fromTo(element,
+    let refreshRaf: number | null = null;
+    const scheduleRefresh = () => {
+      if (typeof window === 'undefined') return;
+      if (refreshRaf !== null) return;
+      refreshRaf = window.requestAnimationFrame(() => {
+        refreshRaf = null;
+        ScrollTrigger.refresh();
+      });
+    };
+
+    const animation = gsap.fromTo(
+      element,
       startProps,
       {
         opacity: 1,
@@ -59,20 +78,40 @@ export default function ScrollReveal({
         ease: 'power2.out',
         scrollTrigger: {
           trigger: element,
-          start: 'top 140%',
+          start: 'top 85%',
           toggleActions: 'play none none reverse',
           invalidateOnRefresh: true
         }
       }
     );
 
-    // Refresh ScrollTrigger after a small delay to catch elements already in view
-    const refreshTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 100);
+    scheduleRefresh();
+
+    const handleResize = () => scheduleRefresh();
+    const handleLoad = () => scheduleRefresh();
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    window.addEventListener('load', handleLoad);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => scheduleRefresh());
+      resizeObserver.observe(element);
+    }
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => scheduleRefresh()).catch(() => {});
+    }
 
     return () => {
-      clearTimeout(refreshTimer);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+      window.removeEventListener('load', handleLoad);
+      resizeObserver?.disconnect();
+      if (refreshRaf !== null) {
+        window.cancelAnimationFrame(refreshRaf);
+      }
+      animation.scrollTrigger?.kill();
       animation.kill();
     };
   }, [type, delay, duration]);
