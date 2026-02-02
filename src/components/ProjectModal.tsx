@@ -1,19 +1,23 @@
 'use client';
 
-import { useState, useEffect, MouseEvent } from 'react';
+import { useState, MouseEvent } from 'react';
+import Image from 'next/image';
 import { useModal } from '@/hooks/useModal';
+import type { Project } from '@/data/portfolio-data';
 
 export default function ProjectModal() {
   const { project, closeModal } = useModal();
+
+  if (!project) return null;
+
+  return <ProjectModalContent key={project.name} project={project} closeModal={closeModal} />;
+}
+
+function ProjectModalContent({ project, closeModal }: { project: Project; closeModal: () => void }) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomX, setZoomX] = useState(0);
   const [zoomY, setZoomY] = useState(0);
-
-  useEffect(() => {
-    setCurrentSlideIndex(0);
-    resetZoom();
-  }, [project]);
 
   const resetZoom = () => {
     setIsZoomed(false);
@@ -22,6 +26,10 @@ export default function ProjectModal() {
   };
 
   const totalSlides = (project?.images?.length || 0) + (project?.video ? 1 : 0);
+  const currentImageSrc =
+    !project.video || currentSlideIndex > 0
+      ? project.images?.[currentSlideIndex - (project.video ? 1 : 0)]
+      : undefined;
 
   const nextSlide = () => {
     if (totalSlides > 1) {
@@ -66,8 +74,6 @@ export default function ProjectModal() {
     closeModal();
   };
 
-  if (!project) return null;
-
   return (
     <div
       className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-opacity duration-200 ${
@@ -110,11 +116,15 @@ export default function ProjectModal() {
               )}
 
               {/* Image Slide */}
-              {(!project.video || currentSlideIndex > 0) && project.images && (
+              {currentImageSrc && (
                 <div className="w-full h-full overflow-hidden relative">
-                  <img
-                    src={project.images[currentSlideIndex - (project.video ? 1 : 0)]}
-                    className={`w-full h-full object-cover transition-transform duration-200 ease-out ${
+                  <Image
+                    src={currentImageSrc}
+                    alt="Project Screenshot"
+                    fill
+                    sizes="(min-width: 768px) 800px, 100vw"
+                    unoptimized={currentImageSrc.startsWith('data:')}
+                    className={`object-cover transition-transform duration-200 ease-out ${
                       isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'
                     }`}
                     style={{
@@ -123,7 +133,6 @@ export default function ProjectModal() {
                     }}
                     onClick={handleImageClick}
                     onMouseMove={handleMouseMove}
-                    alt="Project Screenshot"
                   />
                 </div>
               )}

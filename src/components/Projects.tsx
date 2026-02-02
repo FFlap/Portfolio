@@ -1,6 +1,7 @@
 'use client';
 
 import { portfolioData } from '@/data/portfolio-data';
+import Image from 'next/image';
 import { useModal } from '@/hooks/useModal';
 import ScrollReveal from './ScrollReveal';
 import DraggableTerminal from './DraggableTerminal';
@@ -34,12 +35,15 @@ export default function Projects() {
                   className="cursor-pointer h-full flex flex-col"
                 >
                   {/* Image Preview */}
-                  <div className="h-40 w-full overflow-hidden border-b border-white/5 shrink-0">
+                  <div className="relative h-40 w-full overflow-hidden border-b border-white/5 shrink-0">
                     {project.images && project.images.length > 0 && (
-                      <img
+                      <Image
                         src={project.images[0]}
                         alt={project.name}
-                        className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-105"
+                        fill
+                        sizes="(min-width: 1024px) 350px, (min-width: 768px) 50vw, 100vw"
+                        unoptimized={project.images[0].startsWith('data:')}
+                        className="object-cover opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-105"
                       />
                     )}
                   </div>

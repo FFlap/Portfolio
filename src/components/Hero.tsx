@@ -1,6 +1,7 @@
 'use client';
 
 import { portfolioData } from '@/data/portfolio-data';
+import Image from 'next/image';
 import ScrollReveal from './ScrollReveal';
 import DraggableTerminal from './DraggableTerminal';
 import { useTerminalCommands } from '@/hooks/useTerminalCommands';
@@ -145,9 +146,12 @@ export default function Hero() {
         {/* Profile Image (Left) */}
         <ScrollReveal type="slide-left" className="w-full md:w-5/12 flex justify-center">
           <div className="w-80 md:w-96 rounded-2xl overflow-hidden glass-panel">
-            <img
+            <Image
               src="/assets/profile.jpg"
               alt="Nathan Yan"
+              width={764}
+              height={1024}
+              priority
               className="w-full h-auto object-contain"
             />
           </div>

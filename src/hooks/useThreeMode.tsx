@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface ThreeModeContextType {
   isThreeMode: boolean;
@@ -10,20 +10,20 @@ interface ThreeModeContextType {
 
 const ThreeModeContext = createContext<ThreeModeContextType | undefined>(undefined);
 
-export function ThreeModeProvider({ children }: { children: ReactNode }) {
-  const [isThreeMode, setIsThreeMode] = useState(false);
+function resolveInitialThreeMode(): boolean {
+  if (typeof window === 'undefined') return false;
+  const saved = localStorage.getItem('threeMode');
+  return saved === 'true';
+}
 
-  // Optional: Persist to local storage
-  useEffect(() => {
-    const saved = localStorage.getItem('threeMode');
-    if (saved !== null) {
-      setIsThreeMode(saved === 'true');
-    }
-  }, []);
+export function ThreeModeProvider({ children }: { children: ReactNode }) {
+  const [isThreeMode, setIsThreeMode] = useState(() => resolveInitialThreeMode());
 
   const setThreeMode = (value: boolean) => {
     setIsThreeMode(value);
-    localStorage.setItem('threeMode', String(value));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('threeMode', String(value));
+    }
   };
 
   const toggleThreeMode = () => {

@@ -9,22 +9,24 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Check if WebGL is available
-function isWebGLAvailable() {
+function detectWebGLSupport() {
+  if (typeof window === 'undefined') return false;
   try {
     const canvas = document.createElement('canvas');
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-    );
-  } catch (e) {
+    const context = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!context) return false;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
+    renderer.dispose();
+    return true;
+  } catch {
     return false;
   }
 }
 
 export default function BackgroundScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [webGLSupported, setWebGLSupported] = useState(true);
+  const [webGLSupported] = useState(() => detectWebGLSupport());
   const sceneRef = useRef<{
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
@@ -35,11 +37,7 @@ export default function BackgroundScene() {
   } | null>(null);
 
   useEffect(() => {
-    // Check WebGL support
-    if (!isWebGLAvailable()) {
-      setWebGLSupported(false);
-      return;
-    }
+    if (!webGLSupported) return;
 
     if (!canvasRef.current) return;
 
@@ -49,9 +47,8 @@ export default function BackgroundScene() {
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    } catch (e) {
-      console.warn('WebGL not supported, falling back to CSS background');
-      setWebGLSupported(false);
+    } catch (err) {
+      console.warn('WebGL renderer init failed, falling back to CSS background', err);
       return;
     }
 
@@ -232,25 +229,22 @@ export default function BackgroundScene() {
         sceneRef.current.renderer.dispose();
       }
     };
-  }, []);
-
-  // Fallback CSS background when WebGL is not available
-  if (!webGLSupported) {
-    return (
-      <div className="fixed inset-0 z-0 pointer-events-none bg-[#181C22]">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, #00ff00 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }} />
-        </div>
-      </div>
-    );
-  }
+  }, [webGLSupported]);
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none">
-      <canvas ref={canvasRef} className="w-full h-full block" />
+      <div className="absolute inset-0 bg-[#181C22]">
+        <div className="absolute inset-0 opacity-20">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, #00ff00 1px, transparent 0)`,
+              backgroundSize: '40px 40px',
+            }}
+          />
+        </div>
+      </div>
+      {webGLSupported && <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />}
     </div>
   );
 }

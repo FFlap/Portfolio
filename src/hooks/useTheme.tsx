@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 export type Theme = 'purple' | 'green' | 'orange' | 'blue';
 
@@ -43,33 +43,36 @@ const themeColors = {
   }
 };
 
+function resolveInitialTheme(): Theme {
+  if (typeof window === 'undefined') return 'purple';
+  const savedTheme = localStorage.getItem('theme') as Theme;
+  if (savedTheme && themeColors[savedTheme]) return savedTheme;
+  return 'purple';
+}
+
+function applyThemeVariables(theme: Theme) {
+  if (typeof document === 'undefined') return;
+  const colors = themeColors[theme];
+  const root = document.documentElement;
+  root.style.setProperty('--primary-color', colors.primary);
+  root.style.setProperty('--secondary-color', colors.secondary);
+  root.style.setProperty('--accent-color', colors.accent);
+  root.style.setProperty('--bg-color', colors.bg);
+  root.style.setProperty('--text-color', colors.text);
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('purple');
+  const [theme, setThemeState] = useState<Theme>(() => resolveInitialTheme());
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme && themeColors[savedTheme]) {
-      setThemeState(savedTheme);
-      applyTheme(savedTheme);
-    } else {
-      applyTheme('purple');
+    applyThemeVariables(theme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', theme);
     }
-  }, []);
-
-  const applyTheme = (theme: Theme) => {
-    const colors = themeColors[theme];
-    const root = document.documentElement;
-    root.style.setProperty('--primary-color', colors.primary);
-    root.style.setProperty('--secondary-color', colors.secondary);
-    root.style.setProperty('--accent-color', colors.accent);
-    root.style.setProperty('--bg-color', colors.bg);
-    root.style.setProperty('--text-color', colors.text);
-  };
+  }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
-    applyTheme(newTheme);
   };
 
   return (

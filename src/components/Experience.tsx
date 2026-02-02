@@ -1,6 +1,7 @@
 'use client';
 
 import { portfolioData } from '@/data/portfolio-data';
+import Image from 'next/image';
 import ScrollReveal from './ScrollReveal';
 import DraggableTerminal from './DraggableTerminal';
 import { useTerminalCommands } from '@/hooks/useTerminalCommands';
@@ -43,7 +44,13 @@ export default function Experience() {
                 className="absolute left-0 top-0 w-12 h-12 bg-[var(--bg-surface)] rounded-full border border-zinc-700 flex items-center justify-center z-20 group hover:border-theme transition-colors duration-200 overflow-hidden cursor-pointer"
               >
                 {job.logo ? (
-                  <img src={job.logo} alt={`${job.company} logo`} className="w-full h-full object-cover" />
+                  <Image
+                    src={job.logo}
+                    alt={`${job.company} logo`}
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <span className="text-lg font-bold text-neutral-400 group-hover:text-theme transition-colors">
                     {job.company.charAt(0)}
