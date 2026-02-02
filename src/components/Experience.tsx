@@ -134,6 +134,7 @@ export default function Experience() {
             minWidth={400}
             minHeight={300}
             title="~/experience"
+            capInitialHeightToViewport={false}
           >
             {experienceContent}
           </DraggableTerminal>

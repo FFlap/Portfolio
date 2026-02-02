@@ -8,6 +8,7 @@ interface DraggableTerminalProps {
   minWidth?: number;
   minHeight?: number;
   defaultHeight?: number;
+  capInitialHeightToViewport?: boolean;
   title?: string;
 }
 
@@ -16,6 +17,7 @@ export default function DraggableTerminal({
   minWidth = 400,
   minHeight = 300,
   defaultHeight,
+  capInitialHeightToViewport = true,
   title = '~/portfolio',
 }: DraggableTerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,13 +34,21 @@ export default function DraggableTerminal({
   useEffect(() => {
     if (contentRef.current && !mounted) {
       const rect = contentRef.current.getBoundingClientRect();
-      const height = defaultHeight || rect.height;
-      const measuredSize = { width: rect.width, height };
+      const desiredHeight = defaultHeight ?? rect.height;
+
+      const unclampedHeight = Math.max(minHeight, desiredHeight);
+      const heightCap = Math.max(minHeight, window.innerHeight - 150);
+      const height = Math.ceil(
+        capInitialHeightToViewport ? Math.min(unclampedHeight, heightCap) : unclampedHeight
+      );
+
+      const width = Math.ceil(Math.max(minWidth, rect.width));
+      const measuredSize = { width, height };
       setInitialSize(measuredSize);
       setSize(measuredSize);
       setMounted(true);
     }
-  }, [mounted, defaultHeight]);
+  }, [mounted, defaultHeight, minHeight, minWidth, capInitialHeightToViewport]);
 
   const handleMaximize = () => {
     if (isMaximized) {

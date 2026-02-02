@@ -1,6 +1,6 @@
 'use client';
 
-import { portfolioData, Project } from '@/data/portfolio-data';
+import { portfolioData } from '@/data/portfolio-data';
 import { useModal } from '@/hooks/useModal';
 import ScrollReveal from './ScrollReveal';
 import DraggableTerminal from './DraggableTerminal';
@@ -27,7 +27,7 @@ export default function Projects() {
                 title={`~/projects/${slugify(project.name)}`}
                 minWidth={350}
                 minHeight={280}
-                defaultHeight={450}
+                defaultHeight={540}
               >
                 <div
                   onClick={() => openModal(project)}
@@ -46,18 +46,18 @@ export default function Projects() {
 
                   <div className="p-5 flex-1 flex flex-col min-h-0">
                     <div className="flex justify-between items-start mb-2 shrink-0">
-                      <h3 className="text-lg font-medium text-[var(--text-primary)] hover:text-theme transition-colors duration-200">{project.name}</h3>
+                      <h3 className="min-w-0 flex-1 text-lg font-medium text-[var(--text-primary)] hover:text-theme transition-colors duration-200 break-words">{project.name}</h3>
                       <span className="text-xs text-neutral-500 border border-white/10 px-2 py-1 rounded ml-2 shrink-0">{project.date}</span>
                     </div>
 
                     <p className="text-sm text-theme font-mono mb-3 shrink-0" style={{ opacity: 0.8 }}>{project.tech}</p>
 
-                    {/* Description area - scrollable on hover */}
-                    <div className="flex-1 overflow-hidden hover:overflow-y-auto text-neutral-400 text-sm space-y-2 scrollbar-auto-hide">
+                    {/* Description area - scrollable (no hover required) */}
+                    <div className="flex-1 min-h-0 overflow-y-auto text-neutral-400 text-sm space-y-2 scrollbar-auto-hide pr-1">
                       {project.description.map((desc, idx) => (
                         <div key={idx} className="flex items-start">
                           <span className="mr-3 mt-1.5 w-1.5 h-1.5 bg-neutral-600 rounded-full flex-shrink-0"></span>
-                          <span>{desc}</span>
+                          <span className="min-w-0 break-words">{desc}</span>
                         </div>
                       ))}
                     </div>
@@ -75,4 +75,3 @@ export default function Projects() {
     </section>
   );
 }
-
