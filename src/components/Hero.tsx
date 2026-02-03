@@ -2,6 +2,7 @@
 
 import { portfolioData } from '@/data/portfolio-data';
 import Image from 'next/image';
+import Link from 'next/link';
 import ScrollReveal from './ScrollReveal';
 import DraggableTerminal from './DraggableTerminal';
 import { useTerminalCommands } from '@/hooks/useTerminalCommands';
@@ -82,7 +83,7 @@ export default function Hero() {
                   <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
               </a>
-              <a 
+              <Link
                 href="/assets/Nathan_Yan_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -96,7 +97,7 @@ export default function Hero() {
                   <line x1="16" y1="17" x2="8" y2="17"></line>
                   <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
-              </a>
+              </Link>
             </div>
          </div>
       </div>
