@@ -1,10 +1,23 @@
+import type { StaticImageData } from 'next/image';
+
+import stackdxLogo from '../../public/assets/stackdx-logo.png';
+import uofaLogo from '../../public/assets/uofa-logo.png';
+
+import blockbuddyDashboard from '../../public/assets/blockbuddy/dashboard.png';
+import blockbuddyMap from '../../public/assets/blockbuddy/map.png';
+import blockbuddyFeed from '../../public/assets/blockbuddy/feed.png';
+import blockbuddyChat from '../../public/assets/blockbuddy/chat.png';
+
+import raytracerScene1 from '../../public/assets/raytracer/scene_1.png';
+import raytracerScene2 from '../../public/assets/raytracer/scene_2.png';
+
 export interface Experience {
   role: string;
   company: string;
   location: string;
   period: string;
   description: string[];
-  logo?: string;
+  logo?: string | StaticImageData;
   link?: string;
 }
 
@@ -13,7 +26,7 @@ export interface Project {
   tech: string;
   date: string;
   description: string[];
-  images: string[];
+  images: Array<string | StaticImageData>;
   video?: string;
 }
 
@@ -47,7 +60,7 @@ export const portfolioData = {
       company: 'StackDX',
       location: 'Calgary, Alberta',
       period: 'May 2025 – August 2025',
-      logo: '/assets/stackdx-logo.png',
+      logo: stackdxLogo,
       link: 'https://www.stackdx.com/',
       description: [
         'Developed a user interface using C#, ASP.NET Razor, HTML, JavaScript, and CSS to display and interact with CSV-like files, allowing users to easily view, sort, and filter data in tables, charts, and reports. Handling over 900k previously unsupported files.',
@@ -60,7 +73,7 @@ export const portfolioData = {
       company: 'University of Alberta',
       location: 'Edmonton, Alberta',
       period: 'May 2024 – August 2024',
-      logo: '/assets/uofa-logo.png',
+      logo: uofaLogo,
       link: 'https://www.ualberta.ca/',
       description: [
         'Used AI to analyze toxicity of various comments in bug-tracking forums such as GitHub, StackOverflow, and Bugzilla',
@@ -83,10 +96,10 @@ export const portfolioData = {
       ],
       video: 'https://www.youtube.com/embed/uO3lSjInB1c',
       images: [
-        '/assets/blockbuddy/dashboard.png',
-        '/assets/blockbuddy/map.png',
-        '/assets/blockbuddy/feed.png',
-        '/assets/blockbuddy/chat.png'
+        blockbuddyDashboard,
+        blockbuddyMap,
+        blockbuddyFeed,
+        blockbuddyChat
       ]
     },
     {
@@ -128,8 +141,8 @@ export const portfolioData = {
         'Optimized performance with dynamic memory allocation, Makefile automation, and efficient rendering techniques'
       ],
       images: [
-        '/assets/raytracer/scene_1.png',
-        '/assets/raytracer/scene_2.png'
+        raytracerScene1,
+        raytracerScene2
       ]
     },
     {

@@ -24,6 +24,11 @@ export default function Projects() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, i) => (
             <ScrollReveal key={project.name} delay={i * 0.1}>
+              {(() => {
+                const preview = project.images?.[0];
+                const isDataPreview = typeof preview === 'string' && preview.startsWith('data:');
+
+                return (
               <DraggableTerminal 
                 title={`~/projects/${slugify(project.name)}`}
                 minWidth={350}
@@ -36,13 +41,13 @@ export default function Projects() {
                 >
                   {/* Image Preview */}
                   <div className="relative h-40 w-full overflow-hidden border-b border-white/5 shrink-0">
-                    {project.images && project.images.length > 0 && (
+                    {preview && (
                       <Image
-                        src={project.images[0]}
+                        src={preview}
                         alt={project.name}
                         fill
                         sizes="(min-width: 1024px) 350px, (min-width: 768px) 50vw, 100vw"
-                        unoptimized={project.images[0].startsWith('data:')}
+                        unoptimized={isDataPreview}
                         className="object-cover opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-105"
                       />
                     )}
@@ -72,6 +77,8 @@ export default function Projects() {
                   </div>
                 </div>
               </DraggableTerminal>
+                );
+              })()}
             </ScrollReveal>
           ))}
         </div>

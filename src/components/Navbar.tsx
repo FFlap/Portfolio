@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,7 +31,7 @@ export default function Navbar() {
               <button onClick={() => scrollToSection('home')} className="text-neutral-400 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">Home</button>
               <button onClick={() => scrollToSection('projects')} className="text-neutral-400 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">Projects</button>
               <button onClick={() => scrollToSection('experience')} className="text-neutral-400 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">Experience</button>
-              <Link href="/assets/Nathan_Yan_Resume.pdf" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">Resume</Link>
+              <a href="assets/Nathan_Yan_Resume.pdf" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200">Resume</a>
             </div>
           </div>
 
@@ -60,7 +59,7 @@ export default function Navbar() {
           <button onClick={() => scrollToSection('home')} className="text-neutral-400 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200">Home</button>
           <button onClick={() => scrollToSection('projects')} className="text-neutral-400 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200">Projects</button>
           <button onClick={() => scrollToSection('experience')} className="text-neutral-400 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200">Experience</button>
-          <Link href="/assets/Nathan_Yan_Resume.pdf" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200">Resume</Link>
+          <a href="assets/Nathan_Yan_Resume.pdf" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200">Resume</a>
         </div>
       </div>
     </nav>

@@ -26,10 +26,11 @@ function ProjectModalContent({ project, closeModal }: { project: Project; closeM
   };
 
   const totalSlides = (project?.images?.length || 0) + (project?.video ? 1 : 0);
-  const currentImageSrc =
+  const currentImage =
     !project.video || currentSlideIndex > 0
       ? project.images?.[currentSlideIndex - (project.video ? 1 : 0)]
       : undefined;
+  const isDataImage = typeof currentImage === 'string' && currentImage.startsWith('data:');
 
   const nextSlide = () => {
     if (totalSlides > 1) {
@@ -116,14 +117,14 @@ function ProjectModalContent({ project, closeModal }: { project: Project; closeM
               )}
 
               {/* Image Slide */}
-              {currentImageSrc && (
+              {currentImage && (
                 <div className="w-full h-full overflow-hidden relative">
                   <Image
-                    src={currentImageSrc}
+                    src={currentImage}
                     alt="Project Screenshot"
                     fill
                     sizes="(min-width: 768px) 800px, 100vw"
-                    unoptimized={currentImageSrc.startsWith('data:')}
+                    unoptimized={isDataImage}
                     className={`object-cover transition-transform duration-200 ease-out ${
                       isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'
                     }`}

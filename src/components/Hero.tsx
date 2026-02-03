@@ -2,10 +2,10 @@
 
 import { portfolioData } from '@/data/portfolio-data';
 import Image from 'next/image';
-import Link from 'next/link';
 import ScrollReveal from './ScrollReveal';
 import DraggableTerminal from './DraggableTerminal';
 import { useTerminalCommands } from '@/hooks/useTerminalCommands';
+import profileImage from '../../public/assets/profile.jpg';
 
 export default function Hero() {
   const {
@@ -83,8 +83,8 @@ export default function Hero() {
                   <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
               </a>
-              <Link
-                href="/assets/Nathan_Yan_Resume.pdf"
+              <a
+                href="assets/Nathan_Yan_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-theme transition-colors"
@@ -97,7 +97,7 @@ export default function Hero() {
                   <line x1="16" y1="17" x2="8" y2="17"></line>
                   <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
-              </Link>
+              </a>
             </div>
          </div>
       </div>
@@ -148,7 +148,7 @@ export default function Hero() {
         <ScrollReveal type="slide-left" className="w-full md:w-5/12 flex justify-center">
           <div className="w-80 md:w-96 rounded-2xl overflow-hidden glass-panel">
             <Image
-              src="/assets/profile.jpg"
+              src={profileImage}
               alt="Nathan Yan"
               width={764}
               height={1024}
