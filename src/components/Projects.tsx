@@ -61,10 +61,10 @@ export default function Projects() {
 
                     <p className="text-sm text-theme font-mono mb-3 shrink-0" style={{ opacity: 0.8 }}>{project.tech}</p>
 
-                    {/* Description area - scrollable (no hover required) */}
-                    <div className="flex-1 min-h-0 overflow-y-auto text-neutral-400 text-sm space-y-2 scrollbar-auto-hide pr-1">
+                    {/* Description area - no nested scroll on mobile */}
+                    <div className="flex-none sm:flex-1 sm:min-h-0 sm:overflow-y-auto text-neutral-400 text-sm space-y-2 sm:scrollbar-auto-hide sm:pr-1">
                       {project.description.map((desc, idx) => (
-                        <div key={idx} className="flex items-start">
+                        <div key={idx} className={`${idx === 0 ? 'flex' : 'hidden sm:flex'} items-start`}>
                           <span className="mr-3 mt-1.5 w-1.5 h-1.5 bg-neutral-600 rounded-full flex-shrink-0"></span>
                           <span className="min-w-0 break-words">{desc}</span>
                         </div>

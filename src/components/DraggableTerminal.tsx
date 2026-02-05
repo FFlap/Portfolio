@@ -23,12 +23,24 @@ export default function DraggableTerminal({
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const [isTouchLayout, setIsTouchLayout] = useState(false);
   const [initialSize, setInitialSize] = useState({ width: 0, height: 0 });
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isInteracting, setIsInteracting] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const previousState = useRef({ size, position });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const mq = window.matchMedia('(max-width: 768px), (pointer: coarse)');
+    const update = () => setIsTouchLayout(mq.matches);
+    update();
+
+    mq.addEventListener?.('change', update);
+    return () => mq.removeEventListener?.('change', update);
+  }, []);
 
   // Measure initial size after mount (use defaultHeight if provided)
   useEffect(() => {
@@ -51,6 +63,8 @@ export default function DraggableTerminal({
   }, [mounted, defaultHeight, minHeight, minWidth, capInitialHeightToViewport]);
 
   const handleMaximize = () => {
+    if (isTouchLayout) return;
+
     if (isMaximized) {
       setSize(previousState.current.size);
       setPosition(previousState.current.position);
@@ -93,6 +107,19 @@ export default function DraggableTerminal({
     );
   }
 
+  const resizeConfig = isTouchLayout
+    ? false
+    : {
+        top: true,
+        right: true,
+        bottom: true,
+        left: true,
+        topRight: true,
+        bottomRight: true,
+        bottomLeft: true,
+        topLeft: true,
+      };
+
   return (
     <div 
       ref={containerRef} 
@@ -105,6 +132,7 @@ export default function DraggableTerminal({
       <Rnd
         size={size}
         position={position}
+        disableDragging={isTouchLayout}
         onDragStart={() => setIsInteracting(true)}
         onDrag={(e, d) => {
           setPosition({ x: d.x, y: d.y });
@@ -136,24 +164,17 @@ export default function DraggableTerminal({
         minWidth={minWidth}
         minHeight={minHeight}
         dragHandleClassName="terminal-drag-handle"
-        enableResizing={{
-          top: true,
-          right: true,
-          bottom: true,
-          left: true,
-          topRight: true,
-          bottomRight: true,
-          bottomLeft: true,
-          topLeft: true,
-        }}
+        enableResizing={resizeConfig}
         className="terminal-window"
-        style={{ position: isInteracting ? 'absolute' : 'relative', zIndex: isInteracting ? 50 : 'auto' }}
+        style={{ position: isInteracting && !isTouchLayout ? 'absolute' : 'relative', zIndex: isInteracting && !isTouchLayout ? 50 : 'auto' }}
       >
         <div className="glass-panel rounded-lg overflow-hidden font-mono text-sm md:text-base h-full flex flex-col">
           {/* Terminal Header - Drag Handle */}
           <div 
-            className="terminal-drag-handle bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5 cursor-grab active:cursor-grabbing select-none"
-            onDoubleClick={handleMaximize}
+            className={`terminal-drag-handle bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5 select-none ${
+              isTouchLayout ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'
+            }`}
+            onDoubleClick={isTouchLayout ? undefined : handleMaximize}
           >
             <div 
               className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all"
