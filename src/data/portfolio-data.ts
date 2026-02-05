@@ -11,6 +11,10 @@ import blockbuddyChat from '../../public/assets/blockbuddy/chat.png';
 import raytracerScene1 from '../../public/assets/raytracer/scene_1.png';
 import raytracerScene2 from '../../public/assets/raytracer/scene_2.png';
 
+import safespaceBubbleGraph from '../../public/assets/safespace/bubble_graph.png';
+import safespaceDiscussion from '../../public/assets/safespace/discussion.png';
+import safespaceInbox from '../../public/assets/safespace/inbox.png';
+
 export interface Experience {
   role: string;
   company: string;
@@ -86,6 +90,22 @@ export const portfolioData = {
 
   projects: [
     {
+      name: 'Safe Space (Hack The Bias)',
+      tech: 'TanStack Start, React, Typescript, Convex, Clerk',
+      date: 'January 2026',
+      description: [
+        'Helped users discover support communities (depression, poverty, cancer, etc.) by clustering related spaces with TF-IDF similarity and visualizing them as an interactive, live-updating bubble graph.',
+        'Built anonymous discussion threads within each Space and private outreach through DMs, where users can choose to reveal their name when requesting or offering help.',
+        'Implemented layered content moderation (rules-based prefilter + OpenRouter API) that blocks harmful/sexual content, auto-removes flagged messages, and injects crisis resources for self-harm.'
+      ],
+      video: 'https://www.youtube.com/embed/NoEFE7rwp6o',
+      images: [
+        safespaceBubbleGraph,
+        safespaceDiscussion,
+        safespaceInbox
+      ]
+    },
+    {
       name: 'BlockBuddy (HackTheChange)',
       tech: 'TypeScript, MongoDB, Express, React, Node.js',
       date: 'November 2025',
@@ -111,6 +131,7 @@ export const portfolioData = {
         'Developed interactive mind maps and histograms to visualize frequency-based keyword relationships, empowering users to intuitively explore, compare, and interpret scientific themes within complex datasets.',
         'Integrated Google Gemini AI API to deliver real-time summarization and conversational insights, allowing users to interactively query and analyze large sets of research abstracts through a chat-like interface.'
       ],
+      video: 'https://www.youtube.com/embed/GUED9pYD0MI',
       images: [
         'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzFhMWExYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI0IiBmaWxsPSIjMDBmZmZmIj5NaW5kIE1hcDwvdGV4dD48L3N2Zz4=',
         'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzFhMWExYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI0IiBmaWxsPSIjMDBmZmZmIj5EYXRhIFZpczwvdGV4dD48L3N2Zz4=',
