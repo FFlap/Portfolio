@@ -123,9 +123,10 @@ function ProjectModalContent({ project, closeModal }: { project: Project; closeM
                     src={currentImage}
                     alt="Project Screenshot"
                     fill
-                    sizes="(min-width: 768px) 800px, 100vw"
-                    unoptimized={isDataImage}
-                    className={`object-cover transition-transform duration-200 ease-out ${
+                    sizes="(min-width: 1024px) 1200px, (min-width: 768px) 800px, 100vw"
+                    priority
+                    unoptimized={true}
+                    className={`object-contain transition-transform duration-200 ease-out ${
                       isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'
                     }`}
                     style={{

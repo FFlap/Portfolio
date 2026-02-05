@@ -15,6 +15,10 @@ import safespaceBubbleGraph from '../../public/assets/safespace/bubble_graph.png
 import safespaceDiscussion from '../../public/assets/safespace/discussion.png';
 import safespaceInbox from '../../public/assets/safespace/inbox.png';
 
+import nasaDashboard from '../../public/assets/nasa-hackathon/dashboard.png';
+import nasaMindmap from '../../public/assets/nasa-hackathon/mindmap.png';
+import nasaChat from '../../public/assets/nasa-hackathon/chat.png';
+
 export interface Experience {
   role: string;
   company: string;
@@ -133,9 +137,9 @@ export const portfolioData = {
       ],
       video: 'https://www.youtube.com/embed/GUED9pYD0MI',
       images: [
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzFhMWExYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI0IiBmaWxsPSIjMDBmZmZmIj5NaW5kIE1hcDwvdGV4dD48L3N2Zz4=',
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzFhMWExYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI0IiBmaWxsPSIjMDBmZmZmIj5EYXRhIFZpczwvdGV4dD48L3N2Zz4=',
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzFhMWExYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI0IiBmaWxsPSIjMDBmZmZmIj5BSSBDaGF0PC90ZXh0Pjwvc3ZnPg=='
+        nasaDashboard,
+        nasaMindmap,
+        nasaChat
       ]
     },
     {
