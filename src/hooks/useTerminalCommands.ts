@@ -10,9 +10,9 @@ interface HistoryItem {
   content: string;
 }
 
-export function useTerminalCommands() {
+export function useTerminalCommands(initialValue: string = '') {
   const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(initialValue);
   const { theme, setTheme } = useTheme();
   const { isThreeMode, setThreeMode } = useThreeMode();
   const containerRef = useRef<HTMLDivElement>(null);

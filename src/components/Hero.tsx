@@ -15,7 +15,7 @@ export default function Hero() {
     handleKeydown,
     containerRef,
     inputRef,
-  } = useTerminalCommands();
+  } = useTerminalCommands('background 3d');
 
   const { contact } = portfolioData;
 
