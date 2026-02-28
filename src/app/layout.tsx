@@ -4,6 +4,7 @@ import "./globals.css";
 import { ModalProvider } from "@/hooks/useModal";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { ThreeModeProvider } from "@/hooks/useThreeMode";
+import { TerminalProvider } from "@/hooks/useTerminalState";
 
 const dmSans = DM_Sans({
   variable: "--font-sans",
@@ -35,11 +36,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${dmSans.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable} antialiased`}>
         <ThemeProvider>
-          <ModalProvider>
-            <ThreeModeProvider>
-              {children}
-            </ThreeModeProvider>
-          </ModalProvider>
+          <TerminalProvider>
+            <ModalProvider>
+              <ThreeModeProvider>
+                {children}
+              </ThreeModeProvider>
+            </ModalProvider>
+          </TerminalProvider>
         </ThemeProvider>
       </body>
     </html>

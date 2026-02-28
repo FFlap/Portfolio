@@ -30,6 +30,7 @@ export default function Projects() {
 
                 return (
               <DraggableTerminal 
+                id={`project-${slugify(project.name)}`}
                 title={`~/projects/${slugify(project.name)}`}
                 minWidth={350}
                 minHeight={280}

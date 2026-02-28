@@ -2,8 +2,10 @@
 
 import { useState, useRef, ReactNode, useEffect } from 'react';
 import { Rnd } from 'react-rnd';
+import { useTerminalState } from '@/hooks/useTerminalState';
 
 interface DraggableTerminalProps {
+  id: string;
   children: ReactNode;
   minWidth?: number;
   minHeight?: number;
@@ -13,6 +15,7 @@ interface DraggableTerminalProps {
 }
 
 export default function DraggableTerminal({
+  id,
   children,
   minWidth = 400,
   minHeight = 300,
@@ -30,6 +33,14 @@ export default function DraggableTerminal({
   const [isInteracting, setIsInteracting] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const previousState = useRef({ size, position });
+
+  const { registerTerminal, minimizeTerminal, closeTerminal, terminals } = useTerminalState();
+
+  useEffect(() => {
+    registerTerminal(id, title);
+  }, [id, title, registerTerminal]);
+
+  const terminalState = terminals[id];
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -95,8 +106,8 @@ export default function DraggableTerminal({
       <div ref={contentRef} className="glass-panel rounded-lg overflow-hidden font-mono text-sm md:text-base flex flex-col">
         {/* Terminal Header */}
         <div className="terminal-drag-handle bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5 cursor-grab active:cursor-grabbing select-none">
-          <div className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all" title="Close"></div>
-          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:brightness-110 cursor-pointer transition-all" title="Minimize"></div>
+          <div className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all" onClick={() => closeTerminal(id)} title="Close"></div>
+          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:brightness-110 cursor-pointer transition-all" onClick={() => minimizeTerminal(id)} title="Minimize"></div>
           <div className="w-3 h-3 rounded-full bg-[#27c93f] hover:brightness-110 cursor-pointer transition-all" title="Maximize"></div>
           <span className="ml-2 text-neutral-500 text-xs font-mono">{title}</span>
         </div>
@@ -120,13 +131,16 @@ export default function DraggableTerminal({
         topLeft: true,
       };
 
+  if (terminalState?.isClosed) return null;
+
   return (
     <div 
       ref={containerRef} 
-      className="relative" 
+      className={`relative transition-all duration-300 ${terminalState?.isMinimized ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100 scale-100'}`} 
       style={{ 
         width: isInteracting ? initialSize.width : size.width, 
-        height: isInteracting ? initialSize.height : size.height 
+        height: isInteracting ? initialSize.height : size.height,
+        visibility: terminalState?.isMinimized ? 'hidden' : 'visible'
       }}
     >
       <Rnd
@@ -178,10 +192,12 @@ export default function DraggableTerminal({
           >
             <div 
               className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all"
+              onClick={() => closeTerminal(id)}
               title="Close"
             ></div>
             <div 
               className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:brightness-110 cursor-pointer transition-all"
+              onClick={() => minimizeTerminal(id)}
               title="Minimize"
             ></div>
             <div 

@@ -162,6 +162,7 @@ export default function Hero() {
         <div className="w-full md:w-7/12" style={{ height: 'auto' }}>
           <ScrollReveal type="slide-right" delay={0.2}>
             <DraggableTerminal
+              id="hero-terminal"
               minWidth={400}
               minHeight={300}
             >

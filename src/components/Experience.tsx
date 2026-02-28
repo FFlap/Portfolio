@@ -138,6 +138,7 @@ export default function Experience() {
       <div className="max-w-5xl mx-auto w-full">
         <ScrollReveal type="slide-left">
           <DraggableTerminal
+            id="experience-terminal"
             minWidth={400}
             minHeight={300}
             title="~/experience"

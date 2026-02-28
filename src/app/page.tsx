@@ -13,6 +13,8 @@ const BackgroundScene = dynamic(() => import('@/components/BackgroundScene'), {
   ssr: false,
 });
 
+import AppDock from '@/components/AppDock';
+
 export default function Home() {
   const { isThreeMode } = useThreeMode();
   return (
@@ -38,6 +40,9 @@ export default function Home() {
 
       {/* Global Modal */}
       <ProjectModal />
+
+      {/* App Dock */}
+      <AppDock />
     </>
   );
 }
