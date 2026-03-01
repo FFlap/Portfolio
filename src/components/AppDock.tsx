@@ -17,6 +17,7 @@ export default function AppDock() {
   useEffect(() => {
     // If the number of minimized terminals increases, show the dock temporarily
     if (currentMinimizedCount > previousMinimizedCount.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowIndicator(true);
       const timer = setTimeout(() => setShowIndicator(false), 2500);
       previousMinimizedCount.current = currentMinimizedCount;

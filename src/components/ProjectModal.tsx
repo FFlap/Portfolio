@@ -30,7 +30,6 @@ function ProjectModalContent({ project, closeModal }: { project: Project; closeM
     !project.video || currentSlideIndex > 0
       ? project.images?.[currentSlideIndex - (project.video ? 1 : 0)]
       : undefined;
-  const isDataImage = typeof currentImage === 'string' && currentImage.startsWith('data:');
 
   const nextSlide = () => {
     if (totalSlides > 1) {

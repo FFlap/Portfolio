@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useSyncExternalStore, ReactNode } from 'react';
 
 export type Theme = 'purple' | 'green' | 'orange' | 'blue';
 
@@ -10,6 +10,9 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const THEME_STORAGE_KEY = 'theme';
+const THEME_DEFAULT: Theme = 'purple';
+const listeners = new Set<() => void>();
 
 // Distinct color palettes for each theme
 const themeColors = {
@@ -43,13 +46,6 @@ const themeColors = {
   }
 };
 
-function resolveInitialTheme(): Theme {
-  if (typeof window === 'undefined') return 'purple';
-  const savedTheme = localStorage.getItem('theme') as Theme;
-  if (savedTheme && themeColors[savedTheme]) return savedTheme;
-  return 'purple';
-}
-
 function applyThemeVariables(theme: Theme) {
   if (typeof document === 'undefined') return;
   const colors = themeColors[theme];
@@ -61,18 +57,62 @@ function applyThemeVariables(theme: Theme) {
   root.style.setProperty('--text-color', colors.text);
 }
 
+function resolveThemeFromStorage(): Theme {
+  if (typeof window === 'undefined') {
+    return THEME_DEFAULT;
+  }
+
+  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) as Theme | null;
+  if (savedTheme && themeColors[savedTheme]) {
+    return savedTheme;
+  }
+
+  return THEME_DEFAULT;
+}
+
+function emitThemeChange() {
+  listeners.forEach((listener) => listener());
+}
+
+function subscribeThemeStore(listener: () => void) {
+  listeners.add(listener);
+
+  if (typeof window === 'undefined') {
+    return () => {
+      listeners.delete(listener);
+    };
+  }
+
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === THEME_STORAGE_KEY) {
+      listener();
+    }
+  };
+
+  window.addEventListener('storage', onStorage);
+
+  return () => {
+    listeners.delete(listener);
+    window.removeEventListener('storage', onStorage);
+  };
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => resolveInitialTheme());
+  const theme = useSyncExternalStore(
+    subscribeThemeStore,
+    resolveThemeFromStorage,
+    () => THEME_DEFAULT
+  );
 
   useEffect(() => {
     applyThemeVariables(theme);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('theme', theme);
-    }
   }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+    applyThemeVariables(newTheme);
+    emitThemeChange();
   };
 
   return (

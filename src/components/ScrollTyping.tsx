@@ -2,11 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { TextPlugin } from 'gsap/TextPlugin';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(TextPlugin);
-}
 
 interface ScrollTypingProps {
   text: string;

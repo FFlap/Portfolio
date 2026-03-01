@@ -2,12 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { ensureScrollTriggerRegistered, gsap } from '@/lib/gsapPlugins';
 
 function detectWebGLSupport() {
   if (typeof window === 'undefined') return false;
@@ -186,29 +181,37 @@ export default function BackgroundScene() {
 
     animate();
 
-    // Setup scroll interaction
-    gsap.to(camera.position, {
-      z: 2,
-      y: -2,
-      scrollTrigger: {
-        trigger: 'body',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1
-      }
-    });
+    const tweens: gsap.core.Tween[] = [];
 
-    techObjects.forEach((obj, i) => {
-      gsap.to(obj.position, {
-        y: obj.position.y + (i % 2 === 0 ? 2 : -2),
-        scrollTrigger: {
-          trigger: 'body',
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 2
-        }
+    // Setup scroll interaction only when ScrollTrigger is available.
+    if (ensureScrollTriggerRegistered()) {
+      tweens.push(
+        gsap.to(camera.position, {
+          z: 2,
+          y: -2,
+          scrollTrigger: {
+            trigger: 'body',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1
+          }
+        })
+      );
+
+      techObjects.forEach((obj, i) => {
+        tweens.push(
+          gsap.to(obj.position, {
+            y: obj.position.y + (i % 2 === 0 ? 2 : -2),
+            scrollTrigger: {
+              trigger: 'body',
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 2
+            }
+          })
+        );
       });
-    });
+    }
 
     // Handle resize
     const handleResize = () => {
@@ -224,6 +227,7 @@ export default function BackgroundScene() {
     // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
+      tweens.forEach((tween) => tween.kill());
       if (sceneRef.current) {
         cancelAnimationFrame(sceneRef.current.animationId);
         sceneRef.current.renderer.dispose();

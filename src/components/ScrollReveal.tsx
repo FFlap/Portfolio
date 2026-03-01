@@ -1,12 +1,7 @@
 'use client';
 
 import { ReactNode, useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { ensureScrollTriggerRegistered, gsap } from '@/lib/gsapPlugins';
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -28,6 +23,7 @@ export default function ScrollReveal({
   useLayoutEffect(() => {
     const element = elementRef.current;
     if (!element) return;
+    if (!ensureScrollTriggerRegistered()) return;
 
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
@@ -56,16 +52,6 @@ export default function ScrollReveal({
         break;
     }
 
-    let refreshRaf: number | null = null;
-    const scheduleRefresh = () => {
-      if (typeof window === 'undefined') return;
-      if (refreshRaf !== null) return;
-      refreshRaf = window.requestAnimationFrame(() => {
-        refreshRaf = null;
-        ScrollTrigger.refresh();
-      });
-    };
-
     const animation = gsap.fromTo(
       element,
       startProps,
@@ -85,32 +71,7 @@ export default function ScrollReveal({
       }
     );
 
-    scheduleRefresh();
-
-    const handleResize = () => scheduleRefresh();
-    const handleLoad = () => scheduleRefresh();
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
-    window.addEventListener('load', handleLoad);
-
-    let resizeObserver: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(() => scheduleRefresh());
-      resizeObserver.observe(element);
-    }
-
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(() => scheduleRefresh()).catch(() => {});
-    }
-
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
-      window.removeEventListener('load', handleLoad);
-      resizeObserver?.disconnect();
-      if (refreshRaf !== null) {
-        window.cancelAnimationFrame(refreshRaf);
-      }
       animation.scrollTrigger?.kill();
       animation.kill();
     };
