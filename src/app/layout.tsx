@@ -33,8 +33,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${dmSans.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable} antialiased`}>
+    <html lang="en" style={{ backgroundColor: "#181C22" }}>
+      <body
+        className={`${dmSans.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable} antialiased`}
+        style={{ backgroundColor: "#181C22", color: "#EEEEEE", visibility: "hidden" }}
+      >
         <ThemeProvider>
           <TerminalProvider>
             <ModalProvider>

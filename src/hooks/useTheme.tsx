@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useSyncExternalStore, ReactNode } from 'react';
+import { createContext, useContext, useLayoutEffect, useState, ReactNode } from 'react';
 
 export type Theme = 'purple' | 'green' | 'orange' | 'blue';
 
@@ -11,8 +11,7 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 const THEME_STORAGE_KEY = 'theme';
-const THEME_DEFAULT: Theme = 'purple';
-const listeners = new Set<() => void>();
+const THEME_DEFAULT: Theme = 'blue';
 
 // Distinct color palettes for each theme
 const themeColors = {
@@ -21,6 +20,7 @@ const themeColors = {
     secondary: '#9333ea',
     accent: '#c084fc',
     bg: '#181C22',
+    surface: '#252A30',
     text: '#EEEEEE'
   },
   green: {
@@ -28,6 +28,7 @@ const themeColors = {
     secondary: '#22c55e',
     accent: '#86efac',
     bg: '#181C22',
+    surface: '#252A30',
     text: '#EEEEEE'
   },
   orange: {
@@ -35,6 +36,7 @@ const themeColors = {
     secondary: '#f97316',
     accent: '#fdba74',
     bg: '#181C22',
+    surface: '#252A30',
     text: '#EEEEEE'
   },
   blue: {
@@ -42,6 +44,7 @@ const themeColors = {
     secondary: '#5d9a9d',
     accent: '#9fc5c7',
     bg: '#181C22',
+    surface: '#252A30',
     text: '#EEEEEE'
   }
 };
@@ -53,8 +56,14 @@ function applyThemeVariables(theme: Theme) {
   root.style.setProperty('--primary-color', colors.primary);
   root.style.setProperty('--secondary-color', colors.secondary);
   root.style.setProperty('--accent-color', colors.accent);
-  root.style.setProperty('--bg-color', colors.bg);
-  root.style.setProperty('--text-color', colors.text);
+  root.style.setProperty('--bg-depth', colors.bg);
+  root.style.setProperty('--bg-surface', colors.surface);
+  root.style.setProperty('--text-primary', colors.text);
+  root.style.backgroundColor = colors.bg;
+  if (document.body) {
+    document.body.style.backgroundColor = colors.bg;
+    document.body.style.color = colors.text;
+  }
 }
 
 function resolveThemeFromStorage(): Theme {
@@ -70,49 +79,19 @@ function resolveThemeFromStorage(): Theme {
   return THEME_DEFAULT;
 }
 
-function emitThemeChange() {
-  listeners.forEach((listener) => listener());
-}
-
-function subscribeThemeStore(listener: () => void) {
-  listeners.add(listener);
-
-  if (typeof window === 'undefined') {
-    return () => {
-      listeners.delete(listener);
-    };
-  }
-
-  const onStorage = (event: StorageEvent) => {
-    if (event.key === THEME_STORAGE_KEY) {
-      listener();
-    }
-  };
-
-  window.addEventListener('storage', onStorage);
-
-  return () => {
-    listeners.delete(listener);
-    window.removeEventListener('storage', onStorage);
-  };
-}
-
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const theme = useSyncExternalStore(
-    subscribeThemeStore,
-    resolveThemeFromStorage,
-    () => THEME_DEFAULT
-  );
+  const [theme, setThemeState] = useState<Theme>(() => resolveThemeFromStorage());
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     applyThemeVariables(theme);
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    if (document.body) {
+      document.body.style.visibility = 'visible';
+    }
   }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-    applyThemeVariables(newTheme);
-    emitThemeChange();
+    setThemeState(newTheme);
   };
 
   return (

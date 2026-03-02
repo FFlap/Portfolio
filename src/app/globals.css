@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: dark;
   /* Palette Hierarchy */
   --bg-depth: #181C22;   /* Darkest - Main Background */
   --bg-surface: #252A30; /* Lighter - Sections/Cards */
@@ -13,8 +14,8 @@
 
   /* Theme colors - key accents */
   --primary-color: #76ABAE;
-  --secondary-color: #76ABAE; /* Unified for now */
-  --accent-color: #76ABAE;
+  --secondary-color: #5d9a9d;
+  --accent-color: #9fc5c7;
 }
 
 body {

@@ -103,9 +103,13 @@ export default function DraggableTerminal({
   // Before mount, render normally to measure
   if (!mounted) {
     return (
-      <div ref={contentRef} className="glass-panel rounded-lg overflow-hidden font-mono text-sm md:text-base flex flex-col">
+      <div
+        ref={contentRef}
+        className="rounded-lg overflow-hidden font-mono text-sm md:text-base flex flex-col border border-zinc-700 shadow-xl"
+        style={{ backgroundColor: '#252A30' }}
+      >
         {/* Terminal Header */}
-        <div className="terminal-drag-handle bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5 cursor-grab active:cursor-grabbing select-none">
+        <div className="terminal-drag-handle bg-[#2a2f36] px-4 py-3 flex items-center gap-2 border-b border-zinc-700 cursor-grab active:cursor-grabbing select-none">
           <div className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all" onClick={() => closeTerminal(id)} title="Close"></div>
           <div className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:brightness-110 cursor-pointer transition-all" onClick={() => minimizeTerminal(id)} title="Minimize"></div>
           <div className="w-3 h-3 rounded-full bg-[#27c93f] hover:brightness-110 cursor-pointer transition-all" title="Maximize"></div>
@@ -136,11 +140,11 @@ export default function DraggableTerminal({
   return (
     <div 
       ref={containerRef} 
-      className={`relative transition-all duration-300 ${terminalState?.isMinimized ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100 scale-100'}`} 
+      className={`relative transition-opacity duration-300 ${terminalState?.isMinimized ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} 
       style={{ 
         width: isInteracting ? initialSize.width : size.width, 
         height: isInteracting ? initialSize.height : size.height,
-        visibility: terminalState?.isMinimized ? 'hidden' : 'visible'
+        visibility: terminalState?.isMinimized ? 'hidden' : 'visible',
       }}
     >
       <Rnd
@@ -180,12 +184,18 @@ export default function DraggableTerminal({
         dragHandleClassName="terminal-drag-handle"
         enableResizing={resizeConfig}
         className="terminal-window"
-        style={{ position: isInteracting && !isTouchLayout ? 'absolute' : 'relative', zIndex: isInteracting && !isTouchLayout ? 50 : 'auto' }}
+        style={{
+          position: isInteracting && !isTouchLayout ? 'absolute' : 'relative',
+          zIndex: isInteracting && !isTouchLayout ? 50 : 'auto',
+        }}
       >
-        <div className="glass-panel rounded-lg overflow-hidden font-mono text-sm md:text-base h-full flex flex-col">
+        <div
+          className="rounded-lg overflow-hidden font-mono text-sm md:text-base h-full flex flex-col border border-zinc-700 shadow-xl"
+          style={{ backgroundColor: '#252A30' }}
+        >
           {/* Terminal Header - Drag Handle */}
           <div 
-            className={`terminal-drag-handle bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5 select-none ${
+            className={`terminal-drag-handle bg-[#2a2f36] px-4 py-3 flex items-center gap-2 border-b border-zinc-700 select-none ${
               isTouchLayout ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'
             }`}
             onDoubleClick={isTouchLayout ? undefined : handleMaximize}
