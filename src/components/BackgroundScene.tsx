@@ -7,13 +7,12 @@ import { ensureScrollTriggerRegistered, gsap } from '@/lib/gsapPlugins';
 function detectWebGLSupport() {
   if (typeof window === 'undefined') return false;
   try {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!context) return false;
+    // Probe each context type on an isolated canvas to avoid cross-type context conflicts.
+    const webgl2Canvas = document.createElement('canvas');
+    if (webgl2Canvas.getContext('webgl2')) return true;
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
-    renderer.dispose();
-    return true;
+    const webglCanvas = document.createElement('canvas');
+    return !!(webglCanvas.getContext('webgl') || webglCanvas.getContext('experimental-webgl'));
   } catch {
     return false;
   }
