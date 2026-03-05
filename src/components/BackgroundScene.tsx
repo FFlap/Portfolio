@@ -7,19 +7,16 @@ import { ensureScrollTriggerRegistered, gsap } from '@/lib/gsapPlugins';
 function detectWebGLSupport() {
   if (typeof window === 'undefined') return false;
   try {
-    // Probe each context type on an isolated canvas to avoid cross-type context conflicts.
-    const webgl2Canvas = document.createElement('canvas');
-    if (webgl2Canvas.getContext('webgl2')) return true;
-
-    const webglCanvas = document.createElement('canvas');
-    return !!(webglCanvas.getContext('webgl') || webglCanvas.getContext('experimental-webgl'));
+    // three@r182 is WebGL2-only.
+    const canvas = document.createElement('canvas');
+    return !!canvas.getContext('webgl2');
   } catch {
     return false;
   }
 }
 
 export default function BackgroundScene() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
   const [webGLSupported] = useState(() => detectWebGLSupport());
   const sceneRef = useRef<{
     scene: THREE.Scene;
@@ -33,14 +30,20 @@ export default function BackgroundScene() {
   useEffect(() => {
     if (!webGLSupported) return;
 
-    if (!canvasRef.current) return;
+    if (!canvasContainerRef.current) return;
+    const container = canvasContainerRef.current;
 
-    const canvas = canvasRef.current;
+    // Prevent stale canvas reuse across route transitions/hydration swaps.
+    container.replaceChildren();
 
     // Initialize Three.js with error handling
     let renderer: THREE.WebGLRenderer;
+    let rendererCanvas: HTMLCanvasElement;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      rendererCanvas = renderer.domElement;
+      rendererCanvas.className = 'absolute inset-0 w-full h-full block';
+      container.appendChild(rendererCanvas);
     } catch (err) {
       console.warn('WebGL renderer init failed, falling back to CSS background', err);
       return;
@@ -231,6 +234,10 @@ export default function BackgroundScene() {
         cancelAnimationFrame(sceneRef.current.animationId);
         sceneRef.current.renderer.dispose();
       }
+      sceneRef.current = null;
+      if (rendererCanvas.parentElement === container) {
+        rendererCanvas.remove();
+      }
     };
   }, [webGLSupported]);
 
@@ -247,7 +254,7 @@ export default function BackgroundScene() {
           />
         </div>
       </div>
-      {webGLSupported && <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />}
+      {webGLSupported && <div ref={canvasContainerRef} className="absolute inset-0" />}
     </div>
   );
 }
