@@ -107,36 +107,6 @@ export const portfolioData = {
 
   projects: [
     {
-      name: 'LeetBlock',
-      tech: 'Flutter, Dart',
-      date: 'March 2026',
-      description: [
-        'Built a Flutter productivity app that blocks selected apps until a daily LeetCode quota is completed.',
-        'Added structured practice support through custom lists, NeetCode 250 / Blind 75 presets, and live LeetCode stat tracking for progress visibility.'
-      ],
-      images: [
-        leetblockHomeScreen,
-        leetblockProblemLists,
-        leetblockSettings,
-        leetblockStatisticsLeetcode,
-        leetblockStatisticsPersonal
-      ]
-    },
-    {
-      name: 'Clarity (CalgaryHacks)',
-      tech: 'WXT, TypeScript, React, OpenRouter, shadcn/ui',
-      date: 'February 2026',
-      description: [
-        'Built a browser extension that analyzes webpages and YouTube transcripts, cross-referencing claims against trusted sources to surface misinformation, fallacies, and bias.',
-        'Integrated OpenRouter with Wikipedia/Wikimedia, Google Fact Check, PubMed, and other verification APIs to ground results in external evidence instead of single-model output.',
-        'Placed 8th out of 74 teams at CalgaryHacks.'
-      ],
-      images: [
-        clarityArticleMisinformation,
-        clarityYoutubeMisinformation
-      ]
-    },
-    {
       name: 'Unity (HackED)',
       tech: 'WXT, TypeScript, React, OpenRouter',
       date: 'February 2026',
@@ -154,6 +124,20 @@ export const portfolioData = {
       ]
     },
     {
+      name: 'Clarity (CalgaryHacks)',
+      tech: 'WXT, TypeScript, React, OpenRouter, shadcn/ui',
+      date: 'February 2026',
+      description: [
+        'Built a browser extension that analyzes webpages and YouTube transcripts, cross-referencing claims against trusted sources to surface misinformation, fallacies, and bias.',
+        'Integrated OpenRouter with Wikipedia/Wikimedia, Google Fact Check, PubMed, and other verification APIs to ground results in external evidence instead of single-model output.',
+        'Placed 8th out of 74 teams at CalgaryHacks.'
+      ],
+      images: [
+        clarityArticleMisinformation,
+        clarityYoutubeMisinformation
+      ]
+    },
+    {
       name: 'Safe Space (Hack The Bias)',
       tech: 'TanStack Start, React, Typescript, Convex, Clerk',
       date: 'January 2026',
@@ -167,6 +151,22 @@ export const portfolioData = {
         safespaceBubbleGraph,
         safespaceDiscussion,
         safespaceInbox
+      ]
+    },
+    {
+      name: 'LeetBlock',
+      tech: 'Flutter, Dart',
+      date: 'December 2025',
+      description: [
+        'Built a Flutter productivity app that blocks selected apps until a daily LeetCode quota is completed.',
+        'Added structured practice support through custom lists, NeetCode 250 / Blind 75 presets, and live LeetCode stat tracking for progress visibility.'
+      ],
+      images: [
+        leetblockHomeScreen,
+        leetblockProblemLists,
+        leetblockSettings,
+        leetblockStatisticsLeetcode,
+        leetblockStatisticsPersonal
       ]
     },
     {
@@ -202,6 +202,7 @@ export const portfolioData = {
         nasaChat
       ]
     },
+    /*
     {
       name: 'University Course Availability Notifier',
       tech: 'Python, Selenium, BeautifulSoup, Discord API',
@@ -216,6 +217,7 @@ export const portfolioData = {
         'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzFhMWExYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI0IiBmaWxsPSIjZmZmZjAwIj5EaXNjb3JkIEFsZXJ0PC90ZXh0Pjwvc3ZnPg=='
       ]
     },
+    */
     {
       name: 'Ray Tracing and 3D Rendering',
       tech: 'C',
