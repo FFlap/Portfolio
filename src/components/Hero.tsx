@@ -39,16 +39,16 @@ export default function Hero() {
             </p>
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight">
-              <span className="text-white block mb-2">Building pixel-perfect</span>
+              <span className="text-white block mb-2">Building carefully crafted</span>
               <span className="text-theme">Interactive apps</span>
             </h1>
 
             <p className="text-neutral-400 text-lg md:text-xl font-mono">
-              Full-Stack Developer & AI Researcher
+              3rd Year Computer Science student
             </p>
 
             {/* Social Icons */}
-            <div className="flex gap-4 pt-2 text-neutral-400">
+            <div className="flex flex-wrap items-center gap-4 pt-2 text-neutral-400">
               <a 
                 href={contact.github}
                 target="_blank"
@@ -98,6 +98,13 @@ export default function Hero() {
                   <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
               </a>
+              <div className="ml-2 flex items-center gap-2 text-sm md:ml-4 md:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span className="font-mono">Calgary, Canada</span>
+              </div>
             </div>
          </div>
       </div>

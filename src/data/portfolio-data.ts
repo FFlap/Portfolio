@@ -135,7 +135,7 @@ export const portfolioData = {
       date: 'February 2026',
       description: [
         'Built a browser extension that analyzes webpages and YouTube transcripts, cross-referencing claims against trusted sources to surface misinformation, fallacies, and bias.',
-        'Integrated OpenRouter with Wikipedia/Wikimedia, Google Fact Check, PubMed, and other verification APIs to ground results in external evidence instead of single-model output.',
+        'Integrated OpenRouter with Wikipedia/Wikimedia, Google Fact Check, PubMed, and other verification APIs to support results with external evidence',
         'Placed 8th out of 74 teams at CalgaryHacks.'
       ],
       thumbnail: '/assets/clarity/thumbnail.svg',
