@@ -24,8 +24,12 @@ import leetblockProblemLists from '../../public/assets/leetblock/problemLists.pn
 import leetblockSettings from '../../public/assets/leetblock/settings.png';
 import leetblockStatisticsLeetcode from '../../public/assets/leetblock/statisticsLeetcode.png';
 import leetblockStatisticsPersonal from '../../public/assets/leetblock/statisticsPersonal.png';
+import leetblockLogo from '../../public/assets/leetblock/leetblockLogo.png';
 import clarityArticleMisinformation from '../../public/assets/clarity/articleMisinformation.png';
 import clarityYoutubeMisinformation from '../../public/assets/clarity/youtubeMisinformation.png';
+import clarityThumbnail from '../../public/assets/clarity/thumbnail.svg';
+import safeSpaceLogo from '../../public/assets/safespace/safeSpaceLogo.png';
+import unityLogo from '../../public/assets/unity/unityLogo.png';
 import unityColorBlindFilter from '../../public/assets/unity/colorBlindFilter.png';
 import unityReaderMode from '../../public/assets/unity/readerMode.png';
 import unitySimplifyParagraph from '../../public/assets/unity/simplifyParagraph.png';
@@ -118,7 +122,7 @@ export const portfolioData = {
         'Added quality-of-life and accessibility features including Google search enhancement, autofill, color-blind support, reduced motion, and dyslexia-friendly webpage font overrides.',
         'Added source-linked answers that jump to supporting text on webpages and relevant transcript timestamps on YouTube for faster verification.'
       ],
-      thumbnail: '/assets/unity/unityLogo.png',
+      thumbnail: unityLogo,
       thumbnailFit: 'contain',
       thumbnailBackground: 'white',
       images: [
@@ -138,7 +142,7 @@ export const portfolioData = {
         'Integrated OpenRouter with Wikipedia/Wikimedia, Google Fact Check, PubMed, and other verification APIs to support results with external evidence',
         'Placed 8th out of 74 teams at CalgaryHacks.'
       ],
-      thumbnail: '/assets/clarity/thumbnail.svg',
+      thumbnail: clarityThumbnail,
       thumbnailFit: 'contain',
       thumbnailBackground: 'white',
       images: [
@@ -156,7 +160,7 @@ export const portfolioData = {
         'Implemented layered content moderation (rules-based prefilter + OpenRouter API) that blocks harmful/sexual content, auto-removes flagged messages, and injects crisis resources for self-harm.'
       ],
       video: 'https://www.youtube.com/embed/NoEFE7rwp6o',
-      thumbnail: '/assets/safespace/safeSpaceLogo.png',
+      thumbnail: safeSpaceLogo,
       thumbnailBackground: 'white',
       images: [
         safespaceBubbleGraph,
@@ -172,7 +176,7 @@ export const portfolioData = {
         'Built a Flutter productivity app that blocks selected apps until a daily LeetCode quota is completed.',
         'Added structured practice support through custom lists, NeetCode 250 / Blind 75 presets, and live LeetCode stat tracking for progress visibility.'
       ],
-      thumbnail: '/assets/leetblock/leetblockLogo.png',
+      thumbnail: leetblockLogo,
       thumbnailFit: 'contain',
       thumbnailBackground: 'white',
       images: [
