@@ -21,8 +21,17 @@ export default function ProjectWindowGrid({ projects, idPrefix }: ProjectWindowG
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((project, index) => {
-        const preview = project.images?.[0];
-        const isDataPreview = typeof preview === 'string' && preview.startsWith('data:');
+        const preview = project.thumbnail ?? project.images?.[0];
+        const isUnoptimizedPreview =
+          typeof preview === 'string' && (preview.startsWith('data:') || preview.endsWith('.svg'));
+        const previewContainerClassName =
+          project.thumbnail && project.thumbnailBackground === 'white'
+            ? 'relative h-40 w-full shrink-0 overflow-hidden border-b border-white/5 bg-white'
+            : 'relative h-40 w-full shrink-0 overflow-hidden border-b border-white/5';
+        const previewClassName =
+          project.thumbnail && project.thumbnailFit === 'contain'
+            ? 'object-contain p-1 scale-125 opacity-90 transition-all duration-300 hover:scale-[1.3] hover:opacity-100'
+            : 'object-cover opacity-90 transition-all duration-300 hover:scale-105 hover:opacity-100';
         const projectSlug = slugify(project.name);
 
         return (
@@ -38,15 +47,15 @@ export default function ProjectWindowGrid({ projects, idPrefix }: ProjectWindowG
                 onClick={() => openModal(project)}
                 className="flex h-full cursor-pointer flex-col"
               >
-                <div className="relative h-40 w-full shrink-0 overflow-hidden border-b border-white/5">
+                <div className={previewContainerClassName}>
                   {preview && (
                     <Image
                       src={preview}
                       alt={project.name}
                       fill
                       sizes="(min-width: 1024px) 350px, (min-width: 768px) 50vw, 100vw"
-                      unoptimized={isDataPreview}
-                      className="object-cover opacity-90 transition-all duration-300 hover:scale-105 hover:opacity-100"
+                      unoptimized={isUnoptimizedPreview}
+                      className={previewClassName}
                     />
                   )}
                 </div>

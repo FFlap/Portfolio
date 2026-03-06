@@ -47,6 +47,9 @@ export interface Project {
   tech: string;
   date: string;
   description: string[];
+  thumbnail?: string | StaticImageData;
+  thumbnailFit?: 'cover' | 'contain';
+  thumbnailBackground?: 'default' | 'white';
   images: Array<string | StaticImageData>;
   video?: string;
 }
@@ -115,6 +118,9 @@ export const portfolioData = {
         'Added quality-of-life and accessibility features including Google search enhancement, autofill, color-blind support, reduced motion, and dyslexia-friendly webpage font overrides.',
         'Added source-linked answers that jump to supporting text on webpages and relevant transcript timestamps on YouTube for faster verification.'
       ],
+      thumbnail: '/assets/unity/unityLogo.png',
+      thumbnailFit: 'contain',
+      thumbnailBackground: 'white',
       images: [
         unityReaderMode,
         unitySimplifyParagraph,
@@ -132,6 +138,9 @@ export const portfolioData = {
         'Integrated OpenRouter with Wikipedia/Wikimedia, Google Fact Check, PubMed, and other verification APIs to ground results in external evidence instead of single-model output.',
         'Placed 8th out of 74 teams at CalgaryHacks.'
       ],
+      thumbnail: '/assets/clarity/thumbnail.svg',
+      thumbnailFit: 'contain',
+      thumbnailBackground: 'white',
       images: [
         clarityArticleMisinformation,
         clarityYoutubeMisinformation
@@ -147,6 +156,8 @@ export const portfolioData = {
         'Implemented layered content moderation (rules-based prefilter + OpenRouter API) that blocks harmful/sexual content, auto-removes flagged messages, and injects crisis resources for self-harm.'
       ],
       video: 'https://www.youtube.com/embed/NoEFE7rwp6o',
+      thumbnail: '/assets/safespace/safeSpaceLogo.png',
+      thumbnailBackground: 'white',
       images: [
         safespaceBubbleGraph,
         safespaceDiscussion,
@@ -161,6 +172,9 @@ export const portfolioData = {
         'Built a Flutter productivity app that blocks selected apps until a daily LeetCode quota is completed.',
         'Added structured practice support through custom lists, NeetCode 250 / Blind 75 presets, and live LeetCode stat tracking for progress visibility.'
       ],
+      thumbnail: '/assets/leetblock/leetblockLogo.png',
+      thumbnailFit: 'contain',
+      thumbnailBackground: 'white',
       images: [
         leetblockHomeScreen,
         leetblockProblemLists,
