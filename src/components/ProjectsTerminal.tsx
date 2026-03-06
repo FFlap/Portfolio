@@ -24,7 +24,8 @@ export default function ProjectsTerminal() {
         defaultHeight={250}
       >
         <div
-          className="flex h-full flex-col p-6"
+          ref={containerRef}
+          className="h-full overflow-y-auto p-6 scrollbar-auto-hide"
           onClick={() => inputRef.current?.focus()}
         >
           <div className="space-y-4">
@@ -38,7 +39,7 @@ export default function ProjectsTerminal() {
             </div>
           </div>
 
-          <div ref={containerRef} className="mt-4 min-h-0 flex-1 space-y-1 overflow-y-auto scrollbar-auto-hide pr-1">
+          <div className="mt-4 space-y-1">
             {history.map((item, index) => (
               <div key={index} className="break-words font-mono text-sm md:text-base">
                 {item.type === 'command' && (
@@ -60,7 +61,7 @@ export default function ProjectsTerminal() {
             ))}
           </div>
 
-          <div className="mt-2 flex items-center pt-2 font-mono text-sm md:text-base">
+          <div className="mt-2 flex items-center font-mono text-sm md:text-base">
             <span className="mr-2 text-neutral-500">$</span>
             <input
               ref={inputRef}

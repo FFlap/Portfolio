@@ -4,6 +4,7 @@ import ProjectWindowGrid from './ProjectWindowGrid';
 
 export default function Projects() {
   const { projects } = portfolioData;
+  const featuredProjects = projects.slice(0, 6);
 
   return (
     <section id="projects" className="min-h-screen py-20 relative z-10">
@@ -12,7 +13,7 @@ export default function Projects() {
           Projects
         </h2>
 
-        <ProjectWindowGrid projects={projects} idPrefix="home-project" />
+        <ProjectWindowGrid projects={featuredProjects} idPrefix="home-project" />
 
         <div className="mt-16 flex justify-center">
           <Link

@@ -19,6 +19,19 @@ import nasaDashboard from '../../public/assets/nasa-hackathon/dashboard.png';
 import nasaMindmap from '../../public/assets/nasa-hackathon/mindmap.png';
 import nasaChat from '../../public/assets/nasa-hackathon/chat.png';
 
+import leetblockHomeScreen from '../../public/assets/leetblock/homeScreen.png';
+import leetblockProblemLists from '../../public/assets/leetblock/problemLists.png';
+import leetblockSettings from '../../public/assets/leetblock/settings.png';
+import leetblockStatisticsLeetcode from '../../public/assets/leetblock/statisticsLeetcode.png';
+import leetblockStatisticsPersonal from '../../public/assets/leetblock/statisticsPersonal.png';
+import clarityArticleMisinformation from '../../public/assets/clarity/articleMisinformation.png';
+import clarityYoutubeMisinformation from '../../public/assets/clarity/youtubeMisinformation.png';
+import unityColorBlindFilter from '../../public/assets/unity/colorBlindFilter.png';
+import unityReaderMode from '../../public/assets/unity/readerMode.png';
+import unitySimplifyParagraph from '../../public/assets/unity/simplifyParagraph.png';
+import unityTextToSpeech from '../../public/assets/unity/textToSpeech.png';
+import unityYoutubeTimestamp from '../../public/assets/unity/youtubeTimestamp.png';
+
 export interface Experience {
   role: string;
   company: string;
@@ -93,6 +106,53 @@ export const portfolioData = {
   ] as Experience[],
 
   projects: [
+    {
+      name: 'LeetBlock',
+      tech: 'Flutter, Dart',
+      date: 'March 2026',
+      description: [
+        'Built a Flutter productivity app that blocks selected apps until a daily LeetCode quota is completed.',
+        'Added structured practice support through custom lists, NeetCode 250 / Blind 75 presets, and live LeetCode stat tracking for progress visibility.'
+      ],
+      images: [
+        leetblockHomeScreen,
+        leetblockProblemLists,
+        leetblockSettings,
+        leetblockStatisticsLeetcode,
+        leetblockStatisticsPersonal
+      ]
+    },
+    {
+      name: 'Clarity (CalgaryHacks)',
+      tech: 'WXT, TypeScript, React, OpenRouter, shadcn/ui',
+      date: 'February 2026',
+      description: [
+        'Built a browser extension that analyzes webpages and YouTube transcripts, cross-referencing claims against trusted sources to surface misinformation, fallacies, and bias.',
+        'Integrated OpenRouter with Wikipedia/Wikimedia, Google Fact Check, PubMed, and other verification APIs to ground results in external evidence instead of single-model output.',
+        'Placed 8th out of 74 teams at CalgaryHacks.'
+      ],
+      images: [
+        clarityArticleMisinformation,
+        clarityYoutubeMisinformation
+      ]
+    },
+    {
+      name: 'Unity (HackED)',
+      tech: 'WXT, TypeScript, React, OpenRouter',
+      date: 'February 2026',
+      description: [
+        'Built a browser extension that adds integrated page AI chat, reader mode, audio playback, and accessibility tooling to webpages and YouTube.',
+        'Added quality-of-life and accessibility features including Google search enhancement, autofill, color-blind support, reduced motion, and dyslexia-friendly webpage font overrides.',
+        'Added source-linked answers that jump to supporting text on webpages and relevant transcript timestamps on YouTube for faster verification.'
+      ],
+      images: [
+        unityReaderMode,
+        unitySimplifyParagraph,
+        unityTextToSpeech,
+        unityYoutubeTimestamp,
+        unityColorBlindFilter
+      ]
+    },
     {
       name: 'Safe Space (Hack The Bias)',
       tech: 'TanStack Start, React, Typescript, Convex, Clerk',
