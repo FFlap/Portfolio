@@ -19,7 +19,7 @@ function resolveThreeModeFromStorage() {
 
   const storedMode = localStorage.getItem(THREE_MODE_STORAGE_KEY);
   if (storedMode === null) {
-    return true;
+    return false;
   }
   return storedMode === 'true';
 }
