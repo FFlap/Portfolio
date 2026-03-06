@@ -34,11 +34,14 @@ export default function DraggableTerminal({
   const [isMaximized, setIsMaximized] = useState(false);
   const previousState = useRef({ size, position });
 
-  const { registerTerminal, minimizeTerminal, closeTerminal, terminals } = useTerminalState();
+  const { registerTerminal, unregisterTerminal, minimizeTerminal, closeTerminal, terminals } = useTerminalState();
 
   useEffect(() => {
     registerTerminal(id, title);
-  }, [id, title, registerTerminal]);
+    return () => {
+      unregisterTerminal(id);
+    };
+  }, [id, title, registerTerminal, unregisterTerminal]);
 
   const terminalState = terminals[id];
 

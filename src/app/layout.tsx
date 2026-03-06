@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import AppShell from "@/components/AppShell";
 import { ModalProvider } from "@/hooks/useModal";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { ThreeModeProvider } from "@/hooks/useThreeMode";
@@ -42,7 +43,7 @@ export default function RootLayout({
           <TerminalProvider>
             <ModalProvider>
               <ThreeModeProvider>
-                {children}
+                <AppShell>{children}</AppShell>
               </ThreeModeProvider>
             </ModalProvider>
           </TerminalProvider>
