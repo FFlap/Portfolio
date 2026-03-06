@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 
 export default function AppDock() {
   const { terminals, restoreTerminal, minimizeTerminal } = useTerminalState();
+  const [isTouchLayout, setIsTouchLayout] = useState<boolean | null>(null);
 
   const terminalList = Object.values(terminals).filter(t => !t.isClosed);
   const currentMinimizedCount = terminalList.filter(t => t.isMinimized).length;
@@ -13,6 +14,17 @@ export default function AppDock() {
   const [isHovered, setIsHovered] = useState(false);
   const [showIndicator, setShowIndicator] = useState(false);
   const previousMinimizedCount = useRef(0);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const mq = window.matchMedia('(max-width: 768px), (pointer: coarse)');
+    const update = () => setIsTouchLayout(mq.matches);
+    update();
+
+    mq.addEventListener?.('change', update);
+    return () => mq.removeEventListener?.('change', update);
+  }, []);
 
   useEffect(() => {
     // If the number of minimized terminals increases, show the dock temporarily
@@ -26,7 +38,7 @@ export default function AppDock() {
     previousMinimizedCount.current = currentMinimizedCount;
   }, [currentMinimizedCount]);
 
-  if (terminalList.length === 0) return null;
+  if (isTouchLayout !== false || terminalList.length === 0) return null;
 
   const isVisible = isHovered || showIndicator || currentMinimizedCount > 0 && isHovered;
 

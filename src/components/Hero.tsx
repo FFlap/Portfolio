@@ -148,9 +148,9 @@ export default function Hero() {
   );
 
   return (
-    <section id="home" className="min-h-screen relative z-10">
+    <section id="home" className="relative z-10 pt-16">
       {/* Fixed layout for profile - stays in place */}
-      <div className="min-h-screen flex flex-col md:flex-row items-center justify-center p-8 md:p-16 gap-12">
+      <div className="min-h-[calc(100vh-4rem)] flex flex-col md:flex-row items-center justify-center p-8 md:p-16 gap-12">
         {/* Profile Image (Left) */}
         <ScrollReveal type="slide-left" className="w-full md:w-5/12 flex justify-center">
           <div className="w-80 md:w-96 rounded-2xl overflow-hidden glass-panel">

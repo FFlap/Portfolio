@@ -103,6 +103,11 @@ export default function DraggableTerminal({
     }
   };
 
+  const handleMinimize = () => {
+    if (isTouchLayout) return;
+    minimizeTerminal(id);
+  };
+
   // Before mount, render normally to measure
   if (!mounted) {
     return (
@@ -114,7 +119,12 @@ export default function DraggableTerminal({
         {/* Terminal Header */}
         <div className="terminal-drag-handle bg-[#2a2f36] px-4 py-3 flex items-center gap-2 border-b border-zinc-700 cursor-grab active:cursor-grabbing select-none">
           <div className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all" onClick={() => closeTerminal(id)} title="Close"></div>
-          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:brightness-110 cursor-pointer transition-all" onClick={() => minimizeTerminal(id)} title="Minimize"></div>
+          <div
+            className={`w-3 h-3 rounded-full bg-[#ffbd2e] transition-all ${isTouchLayout ? 'cursor-default opacity-60' : 'cursor-pointer hover:brightness-110'}`}
+            onClick={handleMinimize}
+            title="Minimize"
+            aria-disabled={isTouchLayout}
+          ></div>
           <div className="w-3 h-3 rounded-full bg-[#27c93f] hover:brightness-110 cursor-pointer transition-all" title="Maximize"></div>
           <span className="ml-2 text-neutral-500 text-xs font-mono">{title}</span>
         </div>
@@ -209,9 +219,10 @@ export default function DraggableTerminal({
               title="Close"
             ></div>
             <div 
-              className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:brightness-110 cursor-pointer transition-all"
-              onClick={() => minimizeTerminal(id)}
+              className={`w-3 h-3 rounded-full bg-[#ffbd2e] transition-all ${isTouchLayout ? 'cursor-default opacity-60' : 'cursor-pointer hover:brightness-110'}`}
+              onClick={handleMinimize}
               title="Minimize"
+              aria-disabled={isTouchLayout}
             ></div>
             <div 
               className="w-3 h-3 rounded-full bg-[#27c93f] hover:brightness-110 cursor-pointer transition-all"
