@@ -35,6 +35,11 @@ import unityReaderMode from '../../public/assets/unity/readerMode.png';
 import unitySimplifyParagraph from '../../public/assets/unity/simplifyParagraph.png';
 import unityTextToSpeech from '../../public/assets/unity/textToSpeech.png';
 import unityYoutubeTimestamp from '../../public/assets/unity/youtubeTimestamp.png';
+import newBChatUi from '../../public/assets/newB/chatUi.png';
+import newBHackathonSwipeUi from '../../public/assets/newB/hackathonSwipeUi.png';
+import newBLogo from '../../public/assets/newB/newBlogo.png';
+import newBPeopleSwipeUi from '../../public/assets/newB/peopleSwipeUi.png';
+import newBProjectSwipeUi from '../../public/assets/newB/projectSwipeUi.png';
 
 export interface Experience {
   role: string;
@@ -113,6 +118,26 @@ export const portfolioData = {
   ] as Experience[],
 
   projects: [
+    {
+      name: 'newB (AdaHacks)',
+      tech: 'React, Vite, Express, Supabase, OpenRouter, Puppeteer',
+      date: 'March 2026',
+      description: [
+        'Built a full-stack matchmaking platform for hackathon builders where users create profiles, showcase projects, and swipe through people, projects, and live hackathons to find collaborators.',
+        'Integrated Supabase-backed auth, profile/project persistence, notifications, and real-time chat so likes on profiles or projects can turn directly into conversations.',
+        'Added AI-assisted discovery with OpenRouter-powered project analysis and personalized hackathon summaries, plus live hackathon scraping from Devpost and MLH.'
+      ],
+      video: 'https://www.youtube.com/embed/U1Ow1T2pct8',
+      thumbnail: newBLogo,
+      thumbnailFit: 'contain',
+      thumbnailBackground: 'white',
+      images: [
+        newBPeopleSwipeUi,
+        newBProjectSwipeUi,
+        newBHackathonSwipeUi,
+        newBChatUi
+      ]
+    },
     {
       name: 'Unity (HackED)',
       tech: 'WXT, TypeScript, React, OpenRouter',
