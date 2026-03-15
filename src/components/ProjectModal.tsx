@@ -318,7 +318,7 @@ function ProjectModalContent({
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose}></div>
 
       {/* Modal Content */}
-      <div className="relative bg-[var(--bg-surface)] border border-white/10 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
+      <div className="project-modal-scroll relative bg-[var(--bg-surface)] border border-white/10 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
         <button
           onClick={handleCopyLink}
           aria-label="Copy project link"
