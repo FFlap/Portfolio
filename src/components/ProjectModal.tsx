@@ -104,6 +104,26 @@ function ProjectModalContent({
     setZoomY((y / rect.height) * 100);
   };
 
+  const getShareUrl = () => {
+    const { origin, pathname } = window.location;
+    const normalizedPath = pathname.replace(/\/$/, '');
+    let basePath = '';
+
+    if (normalizedPath.endsWith('/projects')) {
+      basePath = normalizedPath.slice(0, -'/projects'.length);
+    } else {
+      const projectPathMatch = normalizedPath.match(/^(.*)\/projects\/[^/]+$/);
+      if (projectPathMatch) {
+        basePath = projectPathMatch[1];
+      } else if (normalizedPath !== '') {
+        basePath = normalizedPath;
+      }
+    }
+
+    const baseUrl = basePath ? `${origin}${basePath}` : origin;
+    return new URL(getProjectHref(project).replace(/^\//, ''), `${baseUrl}/`).toString();
+  };
+
   const handleClose = () => {
     resetZoom();
     closeModal();
@@ -114,7 +134,7 @@ function ProjectModalContent({
   };
 
   const handleCopyLink = async () => {
-    const shareUrl = new URL(getProjectHref(project), window.location.origin).toString();
+    const shareUrl = getShareUrl();
 
     try {
       if (navigator.clipboard?.writeText) {
