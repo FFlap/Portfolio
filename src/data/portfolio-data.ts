@@ -120,9 +120,10 @@ export const portfolioData = {
   projects: [
     {
       name: 'newB (AdaHacks)',
-      tech: 'React, Vite, Express, Supabase, OpenRouter, Puppeteer',
+      tech: 'React, Express, Supabase, OpenRouter, Puppeteer',
       date: 'March 2026',
       description: [
+        'Placed third place at AdaHacks 2026.',
         'Built a full-stack matchmaking platform for hackathon builders where users create profiles, showcase projects, and swipe through people, projects, and live hackathons to find collaborators.',
         'Integrated Supabase-backed auth, profile/project persistence, notifications, and real-time chat so likes on profiles or projects can turn directly into conversations.',
         'Added AI-assisted discovery with OpenRouter-powered project analysis and personalized hackathon summaries, plus live hackathon scraping from Devpost and MLH.'
