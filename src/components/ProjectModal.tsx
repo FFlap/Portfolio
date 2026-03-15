@@ -1,23 +1,58 @@
 'use client';
 
-import { useState, MouseEvent } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
 import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { Share2 } from 'lucide-react';
 import { useModal } from '@/hooks/useModal';
-import type { Project } from '@/data/portfolio-data';
+import { getProjectBySlug, getProjectHref, type Project } from '@/data/portfolio-data';
 
 export default function ProjectModal() {
   const { project, closeModal } = useModal();
+  const pathname = usePathname();
 
-  if (!project) return null;
+  const routeSlugMatch = pathname.match(/^\/projects\/([^/]+)\/?$/);
+  const routeProject = routeSlugMatch ? getProjectBySlug(routeSlugMatch[1]) ?? null : null;
+  const activeProject = routeProject ?? project;
 
-  return <ProjectModalContent key={project.name} project={project} closeModal={closeModal} />;
+  useEffect(() => {
+    if (!activeProject) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [activeProject]);
+
+  if (!activeProject) return null;
+
+  return (
+    <ProjectModalContent
+      key={activeProject.slug}
+      project={activeProject}
+      closeModal={closeModal}
+      isRouteModal={Boolean(routeProject)}
+    />
+  );
 }
 
-function ProjectModalContent({ project, closeModal }: { project: Project; closeModal: () => void }) {
+function ProjectModalContent({
+  project,
+  closeModal,
+  isRouteModal,
+}: {
+  project: Project;
+  closeModal: () => void;
+  isRouteModal: boolean;
+}) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomX, setZoomX] = useState(0);
   const [zoomY, setZoomY] = useState(0);
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle');
+  const router = useRouter();
 
   const resetZoom = () => {
     setIsZoomed(false);
@@ -72,7 +107,45 @@ function ProjectModalContent({ project, closeModal }: { project: Project; closeM
   const handleClose = () => {
     resetZoom();
     closeModal();
+
+    if (isRouteModal) {
+      router.replace('/projects', { scroll: false });
+    }
   };
+
+  const handleCopyLink = async () => {
+    const shareUrl = new URL(getProjectHref(project), window.location.origin).toString();
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = shareUrl;
+        textArea.setAttribute('readonly', '');
+        textArea.style.position = 'absolute';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+
+      setCopyStatus('copied');
+    } catch {
+      setCopyStatus('error');
+    }
+  };
+
+  useEffect(() => {
+    if (copyStatus === 'idle') return;
+
+    const timer = window.setTimeout(() => {
+      setCopyStatus('idle');
+    }, 2000);
+
+    return () => window.clearTimeout(timer);
+  }, [copyStatus]);
 
   return (
     <div
@@ -80,11 +153,42 @@ function ProjectModalContent({ project, closeModal }: { project: Project; closeM
         project ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}
     >
+      {copyStatus !== 'idle' && (
+        <div className="pointer-events-none absolute left-1/2 top-6 z-[10000] -translate-x-1/2">
+          <div
+            className={`rounded-full border px-4 py-2 text-xs font-mono shadow-2xl backdrop-blur-md transition-all duration-200 ${
+              copyStatus === 'copied'
+                ? 'border-theme/40 bg-[var(--bg-surface)]/90 text-theme'
+                : 'border-red-400/40 bg-[var(--bg-surface)]/90 text-red-300'
+            }`}
+            role="status"
+            aria-live="polite"
+          >
+            {copyStatus === 'copied' ? 'Project link copied' : 'Could not copy link'}
+          </div>
+        </div>
+      )}
+
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose}></div>
 
       {/* Modal Content */}
       <div className="relative bg-[var(--bg-surface)] border border-white/10 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
+        <button
+          onClick={handleCopyLink}
+          aria-label="Copy project link"
+          title="Copy project link"
+          className={`absolute top-4 right-16 z-10 flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-200 ${
+            copyStatus === 'copied'
+              ? 'border-theme/50 bg-theme/15 text-theme'
+              : copyStatus === 'error'
+                ? 'border-red-400/40 bg-red-500/10 text-red-300'
+                : 'border-white/10 bg-white/5 text-neutral-400 hover:border-theme/40 hover:bg-theme/10 hover:text-theme'
+          }`}
+        >
+          <Share2 className="h-4.5 w-4.5" strokeWidth={1.8} />
+        </button>
+
         {/* Close Button */}
         <button
           onClick={handleClose}
@@ -96,8 +200,14 @@ function ProjectModalContent({ project, closeModal }: { project: Project; closeM
         </button>
 
         <div className="p-6 md:p-8">
-          <h2 className="text-3xl font-display font-bold text-[var(--text-primary)] mb-2">{project.name}</h2>
-          <p className="text-theme font-mono mb-6" style={{ opacity: 0.8 }}>{project.tech}</p>
+          <div className="mb-6 pr-24">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-3xl font-display font-bold text-[var(--text-primary)] mb-2">{project.name}</h2>
+                <p className="text-theme font-mono" style={{ opacity: 0.8 }}>{project.tech}</p>
+              </div>
+            </div>
+          </div>
 
           {/* Media Gallery */}
           {totalSlides > 0 && (

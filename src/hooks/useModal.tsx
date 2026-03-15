@@ -16,12 +16,10 @@ export function ModalProvider({ children }: { children: ReactNode }) {
 
   const openModal = (project: Project) => {
     setProject(project);
-    document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
     setProject(null);
-    document.body.style.overflow = '';
   };
 
   return (

@@ -53,6 +53,7 @@ export interface Experience {
 }
 
 export interface Project {
+  slug: string;
   name: string;
   tech: string;
   date: string;
@@ -120,6 +121,7 @@ export const portfolioData = {
 
   projects: [
     {
+      slug: 'newb',
       name: 'newB (AdaHacks)',
       tech: 'React, Express, Supabase, OpenRouter, Puppeteer',
       date: 'March 2026',
@@ -141,6 +143,7 @@ export const portfolioData = {
       ]
     },
     {
+      slug: 'unity',
       name: 'Unity (HackED)',
       tech: 'WXT, TypeScript, React, OpenRouter',
       date: 'February 2026',
@@ -161,6 +164,7 @@ export const portfolioData = {
       ]
     },
     {
+      slug: 'clarity',
       name: 'Clarity (CalgaryHacks)',
       tech: 'WXT, TypeScript, React, OpenRouter, shadcn/ui',
       date: 'February 2026',
@@ -178,6 +182,7 @@ export const portfolioData = {
       ]
     },
     {
+      slug: 'safe-space',
       name: 'Safe Space (Hack The Bias)',
       tech: 'TanStack Start, React, Typescript, Convex, Clerk',
       date: 'January 2026',
@@ -196,6 +201,7 @@ export const portfolioData = {
       ]
     },
     {
+      slug: 'leetblock',
       name: 'LeetBlock',
       tech: 'Flutter, Dart',
       date: 'December 2025',
@@ -215,6 +221,7 @@ export const portfolioData = {
       ]
     },
     {
+      slug: 'blockbuddy',
       name: 'BlockBuddy (HackTheChange)',
       tech: 'TypeScript, MongoDB, Express, React, Node.js',
       date: 'November 2025',
@@ -232,6 +239,7 @@ export const portfolioData = {
       ]
     },
     {
+      slug: 'nasa-space-apps-challenge',
       name: 'NASA Space Apps Challenge',
       tech: 'Next.js, TypeScript, TailwindCSS, PostgreSQL',
       date: 'October 2025',
@@ -267,6 +275,7 @@ export const portfolioData = {
     },
     */
     {
+      slug: 'ray-tracing-and-3d-rendering',
       name: 'Ray Tracing and 3D Rendering',
       tech: 'C',
       date: 'December 2024',
@@ -281,6 +290,7 @@ export const portfolioData = {
       ]
     },
     {
+      slug: 'slime-world',
       name: 'Slime World',
       tech: 'Java, Processing',
       date: 'Dec 2022 - April 2023',
@@ -315,3 +325,11 @@ export const portfolioData = {
     }
   ] as SkillCategory[]
 };
+
+export function getProjectBySlug(slug: string) {
+  return portfolioData.projects.find((project) => project.slug === slug);
+}
+
+export function getProjectHref(project: Pick<Project, 'slug'>) {
+  return `/projects/${project.slug}`;
+}

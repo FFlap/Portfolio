@@ -11,10 +11,6 @@ interface ProjectWindowGridProps {
   idPrefix: string;
 }
 
-function slugify(name: string) {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-}
-
 export default function ProjectWindowGrid({ projects, idPrefix }: ProjectWindowGridProps) {
   const { openModal } = useModal();
 
@@ -32,13 +28,12 @@ export default function ProjectWindowGrid({ projects, idPrefix }: ProjectWindowG
           project.thumbnail && project.thumbnailFit === 'contain'
             ? 'object-contain p-1 scale-125 opacity-90 transition-all duration-300 hover:scale-[1.3] hover:opacity-100'
             : 'object-cover opacity-90 transition-all duration-300 hover:scale-105 hover:opacity-100';
-        const projectSlug = slugify(project.name);
 
         return (
           <ScrollReveal key={project.name} delay={index * 0.1}>
             <DraggableTerminal
-              id={`${idPrefix}-${projectSlug}`}
-              title={`~/projects/${projectSlug}`}
+              id={`${idPrefix}-${project.slug}`}
+              title={`~/projects/${project.slug}`}
               minWidth={350}
               minHeight={280}
               defaultHeight={540}
