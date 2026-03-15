@@ -18,6 +18,7 @@ import safespaceInbox from '../../public/assets/safespace/inbox.png';
 import nasaDashboard from '../../public/assets/nasa-hackathon/dashboard.png';
 import nasaMindmap from '../../public/assets/nasa-hackathon/mindmap.png';
 import nasaChat from '../../public/assets/nasa-hackathon/chat.png';
+import nasaSpaceAppsLogo from '../../public/assets/nasa-hackathon/nasaSpaceAppsLogo.webp';
 
 import leetblockHomeScreen from '../../public/assets/leetblock/homeScreen.png';
 import leetblockProblemLists from '../../public/assets/leetblock/problemLists.png';
@@ -240,6 +241,9 @@ export const portfolioData = {
         'Integrated Google Gemini AI API to deliver real-time summarization and conversational insights, allowing users to interactively query and analyze large sets of research abstracts through a chat-like interface.'
       ],
       video: 'https://www.youtube.com/embed/GUED9pYD0MI',
+      thumbnail: nasaSpaceAppsLogo,
+      thumbnailFit: 'contain',
+      thumbnailBackground: 'white',
       images: [
         nasaDashboard,
         nasaMindmap,
