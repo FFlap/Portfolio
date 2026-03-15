@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState, MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { Share2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Share2, X } from 'lucide-react';
 import { useModal } from '@/hooks/useModal';
 import { getProjectBySlug, getProjectHref, type Project } from '@/data/portfolio-data';
 
@@ -48,61 +48,98 @@ function ProjectModalContent({
   isRouteModal: boolean;
 }) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [zoomX, setZoomX] = useState(0);
-  const [zoomY, setZoomY] = useState(0);
+  const [fullscreenImageIndex, setFullscreenImageIndex] = useState<number | null>(null);
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle');
   const router = useRouter();
 
-  const resetZoom = () => {
-    setIsZoomed(false);
-    setZoomX(0);
-    setZoomY(0);
+  const totalSlides = (project?.images?.length || 0) + (project?.video ? 1 : 0);
+  const imageOffset = project.video ? 1 : 0;
+  const currentImageIndex = currentSlideIndex - imageOffset;
+  const currentImage =
+    !project.video || currentSlideIndex > 0 ? project.images?.[currentImageIndex] : undefined;
+  const fullscreenImage =
+    fullscreenImageIndex !== null ? project.images?.[fullscreenImageIndex] : undefined;
+  const isImageViewerOpen = fullscreenImageIndex !== null;
+
+  const syncToImageIndex = (imageIndex: number) => {
+    setCurrentSlideIndex(imageIndex + imageOffset);
   };
 
-  const totalSlides = (project?.images?.length || 0) + (project?.video ? 1 : 0);
-  const currentImage =
-    !project.video || currentSlideIndex > 0
-      ? project.images?.[currentSlideIndex - (project.video ? 1 : 0)]
-      : undefined;
+  const openImageViewer = () => {
+    if (currentImageIndex < 0) return;
+    setFullscreenImageIndex(currentImageIndex);
+  };
+
+  const closeImageViewer = () => {
+    setFullscreenImageIndex(null);
+  };
 
   const nextSlide = () => {
     if (totalSlides > 1) {
       setCurrentSlideIndex((prev) => (prev + 1) % totalSlides);
-      resetZoom();
     }
   };
 
   const prevSlide = () => {
     if (totalSlides > 1) {
       setCurrentSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-      resetZoom();
     }
   };
 
-  const handleImageClick = (e: MouseEvent<HTMLImageElement>) => {
-    if (!isZoomed) {
-      setIsZoomed(true);
-      updateZoomPosition(e);
-    } else {
-      resetZoom();
-    }
+  const nextFullscreenImage = () => {
+    if (!project.images.length || fullscreenImageIndex === null) return;
+
+    const nextImageIndex = (fullscreenImageIndex + 1) % project.images.length;
+    setFullscreenImageIndex(nextImageIndex);
+    syncToImageIndex(nextImageIndex);
   };
 
-  const handleMouseMove = (e: MouseEvent<HTMLImageElement>) => {
-    if (isZoomed) {
-      updateZoomPosition(e);
-    }
+  const prevFullscreenImage = () => {
+    if (!project.images.length || fullscreenImageIndex === null) return;
+
+    const prevImageIndex = (fullscreenImageIndex - 1 + project.images.length) % project.images.length;
+    setFullscreenImageIndex(prevImageIndex);
+    syncToImageIndex(prevImageIndex);
   };
 
-  const updateZoomPosition = (e: MouseEvent<HTMLImageElement>) => {
-    const imgElement = e.target as HTMLImageElement;
-    const rect = imgElement.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setZoomX((x / rect.width) * 100);
-    setZoomY((y / rect.height) * 100);
-  };
+  useEffect(() => {
+    if (!isImageViewerOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeImageViewer();
+        return;
+      }
+
+      if (project.images.length <= 1) return;
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        setFullscreenImageIndex((prev) => {
+          if (prev === null) return prev;
+
+          const nextImageIndex = (prev + 1) % project.images.length;
+          setCurrentSlideIndex(nextImageIndex + imageOffset);
+          return nextImageIndex;
+        });
+      }
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        setFullscreenImageIndex((prev) => {
+          if (prev === null) return prev;
+
+          const prevImageIndex = (prev - 1 + project.images.length) % project.images.length;
+          setCurrentSlideIndex(prevImageIndex + imageOffset);
+          return prevImageIndex;
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isImageViewerOpen, project.images.length, imageOffset]);
 
   const getShareUrl = () => {
     const { origin, pathname } = window.location;
@@ -125,7 +162,7 @@ function ProjectModalContent({
   };
 
   const handleClose = () => {
-    resetZoom();
+    closeImageViewer();
     closeModal();
 
     if (isRouteModal) {
@@ -189,6 +226,94 @@ function ProjectModalContent({
         </div>
       )}
 
+      {isImageViewerOpen && fullscreenImage && (
+        <div className="absolute inset-0 z-[10001] flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="absolute inset-0 bg-black/95 backdrop-blur-md"
+            onClick={closeImageViewer}
+          ></div>
+
+          <div
+            className="relative z-[10002] flex h-full w-full items-center justify-center"
+            onClick={closeImageViewer}
+          >
+            <button
+              onClick={closeImageViewer}
+              className="absolute right-0 top-0 z-10 flex h-11 w-11 items-center justify-center rounded-full border text-[var(--text-primary)] transition-all duration-200 hover:scale-105 hover:bg-theme/15 hover:text-theme"
+              style={{
+                borderColor: 'color-mix(in srgb, var(--primary-color) 28%, rgba(255,255,255,0.1))',
+                background: 'color-mix(in srgb, var(--bg-surface) 88%, rgba(0,0,0,0.28))',
+                boxShadow: '0 18px 44px rgba(0,0,0,0.22)'
+              }}
+              aria-label="Close fullscreen image"
+            >
+              <X className="h-5 w-5" strokeWidth={1.8} />
+            </button>
+
+            {project.images.length > 1 && (
+              <>
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    prevFullscreenImage();
+                  }}
+                  className="absolute left-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border text-[var(--text-primary)] transition-all duration-200 hover:-translate-y-1/2 hover:scale-105 hover:bg-theme/15 hover:text-theme"
+                  style={{
+                    borderColor: 'color-mix(in srgb, var(--primary-color) 28%, rgba(255,255,255,0.1))',
+                    background: 'color-mix(in srgb, var(--bg-surface) 88%, rgba(0,0,0,0.28))',
+                    boxShadow: '0 18px 44px rgba(0,0,0,0.22)'
+                  }}
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="h-6 w-6" strokeWidth={1.8} />
+                </button>
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    nextFullscreenImage();
+                  }}
+                  className="absolute right-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border text-[var(--text-primary)] transition-all duration-200 hover:-translate-y-1/2 hover:scale-105 hover:bg-theme/15 hover:text-theme"
+                  style={{
+                    borderColor: 'color-mix(in srgb, var(--primary-color) 28%, rgba(255,255,255,0.1))',
+                    background: 'color-mix(in srgb, var(--bg-surface) 88%, rgba(0,0,0,0.28))',
+                    boxShadow: '0 18px 44px rgba(0,0,0,0.22)'
+                  }}
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="h-6 w-6" strokeWidth={1.8} />
+                </button>
+              </>
+            )}
+
+            <div
+              className="relative h-[82vh] w-[94vw] max-w-7xl overflow-hidden rounded-2xl border border-white/10 bg-black/30 shadow-[0_40px_140px_rgba(0,0,0,0.65)]"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <Image
+                src={fullscreenImage}
+                alt={`${project.name} screenshot ${fullscreenImageIndex + 1}`}
+                fill
+                sizes="100vw"
+                priority
+                unoptimized={true}
+                className="object-contain"
+              />
+            </div>
+
+            <div
+              className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 rounded-full border px-4 py-2 text-xs font-mono text-[var(--text-primary)] backdrop-blur-md"
+              style={{
+                borderColor: 'color-mix(in srgb, var(--primary-color) 24%, rgba(255,255,255,0.08))',
+                background: 'color-mix(in srgb, var(--bg-surface) 86%, rgba(0,0,0,0.25))',
+                boxShadow: '0 18px 44px rgba(0,0,0,0.2)'
+              }}
+            >
+              {fullscreenImageIndex + 1} / {project.images.length}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose}></div>
 
@@ -209,14 +334,11 @@ function ProjectModalContent({
           <Share2 className="h-4.5 w-4.5" strokeWidth={1.8} />
         </button>
 
-        {/* Close Button */}
         <button
           onClick={handleClose}
           className="absolute top-4 right-4 text-neutral-400 hover:text-white z-10 p-2 transition-colors duration-200"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X className="h-6 w-6" strokeWidth={1.8} />
         </button>
 
         <div className="p-6 md:p-8">
@@ -229,10 +351,8 @@ function ProjectModalContent({
             </div>
           </div>
 
-          {/* Media Gallery */}
           {totalSlides > 0 && (
             <div className="relative mb-8 aspect-video bg-black rounded-lg overflow-hidden group border border-neutral-800">
-              {/* Video Slide */}
               {project.video && currentSlideIndex === 0 && (
                 <div className="w-full h-full">
                   <iframe
@@ -245,9 +365,8 @@ function ProjectModalContent({
                 </div>
               )}
 
-              {/* Image Slide */}
               {currentImage && (
-                <div className="w-full h-full overflow-hidden relative">
+                <div className="relative h-full w-full overflow-hidden">
                   <Image
                     src={currentImage}
                     alt="Project Screenshot"
@@ -255,42 +374,29 @@ function ProjectModalContent({
                     sizes="(min-width: 1024px) 1200px, (min-width: 768px) 800px, 100vw"
                     priority
                     unoptimized={true}
-                    className={`object-contain transition-transform duration-200 ease-out ${
-                      isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'
-                    }`}
-                    style={{
-                      transform: isZoomed ? 'scale(2.5)' : 'scale(1)',
-                      transformOrigin: `${zoomX}% ${zoomY}%`
-                    }}
-                    onClick={handleImageClick}
-                    onMouseMove={handleMouseMove}
+                    className="cursor-zoom-in object-contain transition-transform duration-200 ease-out hover:scale-[1.01]"
+                    onClick={openImageViewer}
                   />
                 </div>
               )}
 
-              {/* Navigation Buttons */}
               {totalSlides > 1 && (
                 <>
                   <button
                     onClick={prevSlide}
                     className="absolute left-2 top-1/2 -translate-y-1/2 bg-neutral-800 hover:bg-neutral-700 text-white p-2 rounded-full transition-colors duration-200 z-10"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                    </svg>
+                    <ChevronLeft className="h-6 w-6" strokeWidth={1.8} />
                   </button>
                   <button
                     onClick={nextSlide}
                     className="absolute right-2 top-1/2 -translate-y-1/2 bg-neutral-800 hover:bg-neutral-700 text-white p-2 rounded-full transition-colors duration-200 z-10"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                    </svg>
+                    <ChevronRight className="h-6 w-6" strokeWidth={1.8} />
                   </button>
                 </>
               )}
 
-              {/* Indicators */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
                 {Array.from({ length: totalSlides }).map((_, i) => (
                   <div
@@ -298,17 +404,13 @@ function ProjectModalContent({
                     className={`w-2 h-2 rounded-full transition-colors duration-200 cursor-pointer ${
                       i === currentSlideIndex ? 'bg-theme' : 'bg-neutral-700'
                     }`}
-                    onClick={() => {
-                      setCurrentSlideIndex(i);
-                      resetZoom();
-                    }}
+                    onClick={() => setCurrentSlideIndex(i)}
                   ></div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Description */}
           <ul className="space-y-3 mb-8">
             {project.description.map((desc, index) => (
               <li key={index} className="flex items-start">
@@ -320,7 +422,6 @@ function ProjectModalContent({
             ))}
           </ul>
 
-          {/* Bottom Close Button */}
           <div className="flex justify-end">
             <button
               onClick={handleClose}
