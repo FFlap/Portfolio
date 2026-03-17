@@ -129,8 +129,9 @@ export const portfolioData = {
       description: [
         'Placed third place at AdaHacks 2026.',
         'Built a full-stack matchmaking platform for hackathon builders where users create profiles, showcase projects, and swipe through people, projects, and live hackathons to find collaborators.',
-        'Integrated Supabase-backed auth, profile/project persistence, notifications, and real-time chat so likes on profiles or projects can turn directly into conversations.',
-        'Added AI-assisted discovery with OpenRouter-powered project analysis and personalized hackathon summaries, plus live hackathon scraping from Devpost and MLH.'
+        'Integrated real-time chat so likes on profiles or projects could turn directly into conversations.',
+        'Added AI-powered project analysis and hackathon discovery to help builders find stronger matches faster.',
+        'Built live hackathon discovery by scraping MLH and Devpost for active and upcoming events.'
       ],
       repoUrl: 'https://github.com/FFlap/newB',
       video: 'https://www.youtube.com/embed/U1Ow1T2pct8',
