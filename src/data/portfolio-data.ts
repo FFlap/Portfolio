@@ -58,6 +58,7 @@ export interface Project {
   tech: string;
   date: string;
   description: string[];
+  repoUrl?: string;
   thumbnail?: string | StaticImageData;
   thumbnailFit?: 'cover' | 'contain';
   thumbnailBackground?: 'default' | 'white';
@@ -131,6 +132,7 @@ export const portfolioData = {
         'Integrated Supabase-backed auth, profile/project persistence, notifications, and real-time chat so likes on profiles or projects can turn directly into conversations.',
         'Added AI-assisted discovery with OpenRouter-powered project analysis and personalized hackathon summaries, plus live hackathon scraping from Devpost and MLH.'
       ],
+      repoUrl: 'https://github.com/FFlap/newB',
       video: 'https://www.youtube.com/embed/U1Ow1T2pct8',
       thumbnail: newBLogo,
       thumbnailFit: 'contain',
@@ -152,6 +154,7 @@ export const portfolioData = {
         'Added quality-of-life and accessibility features including Google search enhancement, autofill, color-blind support, reduced motion, and dyslexia-friendly webpage font overrides.',
         'Added source-linked answers that jump to supporting text on webpages and relevant transcript timestamps on YouTube for faster verification.'
       ],
+      repoUrl: 'https://github.com/FFlap/Unity',
       thumbnail: unityLogo,
       thumbnailFit: 'contain',
       thumbnailBackground: 'white',
@@ -173,6 +176,7 @@ export const portfolioData = {
         'Integrated OpenRouter with Wikipedia/Wikimedia, Google Fact Check, PubMed, and other verification APIs to support results with external evidence',
         'Placed 8th out of 74 teams at CalgaryHacks.'
       ],
+      repoUrl: 'https://github.com/FFlap/Clarity',
       thumbnail: clarityThumbnail,
       thumbnailFit: 'contain',
       thumbnailBackground: 'white',
@@ -191,6 +195,7 @@ export const portfolioData = {
         'Built anonymous discussion threads within each Space and private outreach through DMs, where users can choose to reveal their name when requesting or offering help.',
         'Implemented layered content moderation (rules-based prefilter + OpenRouter API) that blocks harmful/sexual content, auto-removes flagged messages, and injects crisis resources for self-harm.'
       ],
+      repoUrl: 'https://github.com/FFlap/SafeSpace',
       video: 'https://www.youtube.com/embed/NoEFE7rwp6o',
       thumbnail: safeSpaceLogo,
       thumbnailBackground: 'white',
@@ -209,6 +214,7 @@ export const portfolioData = {
         'Built a Flutter productivity app that blocks selected apps until a daily LeetCode quota is completed.',
         'Added structured practice support through custom lists, NeetCode 250 / Blind 75 presets, and live LeetCode stat tracking for progress visibility.'
       ],
+      repoUrl: 'https://github.com/FFlap/LeetBlock',
       thumbnail: leetblockLogo,
       thumbnailFit: 'contain',
       thumbnailBackground: 'white',
@@ -230,6 +236,7 @@ export const portfolioData = {
         'Developed multi-channel community chat to facilitate neighbourhood, city, and private conversations with threaded discussions and inboxes, empowering residents to coordinate and escalate issues.',
         'Created geospatial map visualizations and a dynamic complaint feed.'
       ],
+      repoUrl: 'https://github.com/FFlap/BlockBuddy',
       video: 'https://www.youtube.com/embed/uO3lSjInB1c',
       images: [
         blockbuddyDashboard,
@@ -248,6 +255,7 @@ export const portfolioData = {
         'Developed interactive mind maps and histograms to visualize frequency-based keyword relationships, empowering users to intuitively explore, compare, and interpret scientific themes within complex datasets.',
         'Integrated Google Gemini AI API to deliver real-time summarization and conversational insights, allowing users to interactively query and analyze large sets of research abstracts through a chat-like interface.'
       ],
+      repoUrl: 'https://github.com/FFlap/nasa-hackathon-2025',
       video: 'https://www.youtube.com/embed/GUED9pYD0MI',
       thumbnail: nasaSpaceAppsLogo,
       thumbnailFit: 'contain',
@@ -299,6 +307,7 @@ export const portfolioData = {
         'Manually implemented physics-based mechanics, including gravity, jumping, and collision handling, without relying on external physics engines.',
         'Implemented collision detection and AI mechanics, enabling dynamic enemy behavior, player interactions, and projectile physics.'
       ],
+      repoUrl: 'https://github.com/FFlap/CS30-Final-Project',
       images: [
         'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzFhMWExYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI0IiBmaWxsPSIjMDBmZjAwIj5TbGltZSBXb3JsZCBHYW1lcGxheTwvdGV4dD48L3N2Zz4=',
         'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzFhMWExYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI0IiBmaWxsPSIjMDBmZjAwIj5MZXZlbCBEZXNpZ248L3RleHQ+PC9zdmc+'

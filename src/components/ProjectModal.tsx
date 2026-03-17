@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { ChevronLeft, ChevronRight, Share2, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Github, Share2, X } from 'lucide-react';
 import { useModal } from '@/hooks/useModal';
 import { getProjectBySlug, getProjectHref, type Project } from '@/data/portfolio-data';
 
@@ -345,7 +345,21 @@ function ProjectModalContent({
           <div className="mb-6 pr-24">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-3xl font-display font-bold text-[var(--text-primary)] mb-2">{project.name}</h2>
+                <div className="mb-2 flex items-center gap-3">
+                  <h2 className="text-3xl font-display font-bold text-[var(--text-primary)]">{project.name}</h2>
+                  {project.repoUrl && (
+                    <a
+                      href={project.repoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${project.name} GitHub repository`}
+                      title="View GitHub repository"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-neutral-400 transition-colors duration-200 hover:border-theme/40 hover:bg-theme/10 hover:text-theme"
+                    >
+                      <Github className="h-4.5 w-4.5" strokeWidth={1.8} />
+                    </a>
+                  )}
+                </div>
                 <p className="text-theme font-mono" style={{ opacity: 0.8 }}>{project.tech}</p>
               </div>
             </div>
