@@ -66,7 +66,7 @@ export default function Navbar() {
               </Link>
               {renderNavAction('Experience', 'experience', '/#experience', 'text-neutral-400 hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200')}
               <a
-                href="assets/Nathan_Yan_Resume.pdf"
+                href="/assets/Nathan_Yan_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleMenuClose}
@@ -104,7 +104,7 @@ export default function Navbar() {
           </Link>
           {renderNavAction('Experience', 'experience', '/#experience', 'text-neutral-300 hover:bg-white/5 hover:text-white block px-4 py-3 text-base font-medium w-full text-left transition-colors duration-200')}
           <a
-            href="assets/Nathan_Yan_Resume.pdf"
+            href="/assets/Nathan_Yan_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleMenuClose}

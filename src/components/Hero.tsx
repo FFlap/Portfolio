@@ -84,7 +84,7 @@ export default function Hero() {
                 </svg>
               </a>
               <a
-                href="assets/Nathan_Yan_Resume.pdf"
+                href="/assets/Nathan_Yan_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-theme transition-colors"
@@ -156,7 +156,7 @@ export default function Hero() {
           <div className="w-80 md:w-96 rounded-2xl overflow-hidden glass-panel">
             <Image
               src={profileImage}
-              alt="Nathan Yan"
+              alt="Portrait of Nathan Yan"
               width={764}
               height={1024}
               priority

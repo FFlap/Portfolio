@@ -85,9 +85,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     applyThemeVariables(theme);
     localStorage.setItem(THEME_STORAGE_KEY, theme);
-    if (document.body) {
-      document.body.style.visibility = 'visible';
-    }
   }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
