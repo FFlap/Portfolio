@@ -170,7 +170,7 @@ export const portfolioData = {
     {
       slug: 'clarity',
       name: 'Clarity (CalgaryHacks)',
-      tech: 'WXT, TypeScript, React, OpenRouter, shadcn/ui',
+      tech: 'WXT, TypeScript, React, OpenRouter',
       date: 'February 2026',
       description: [
         'Built a browser extension that analyzes webpages and YouTube transcripts, cross-referencing claims against trusted sources to surface misinformation, fallacies, and bias.',
