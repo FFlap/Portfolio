@@ -128,7 +128,7 @@ export const portfolioData = {
       date: 'March 2026',
       description: [
         'Placed third place at AdaHacks 2026.',
-        'Built a full-stack matchmaking platform for hackathon builders where users create profiles, showcase projects, and swipe through people, projects, and live hackathons to find collaborators.',
+        'Built a full-stack matchmaking platform that helps hackathon builders showcase projects, and discover collaborators by swiping through people, projects, and live hackathons.',
         'Integrated real-time chat so likes on profiles or projects could turn directly into conversations.',
         'Added AI-powered project analysis and hackathon discovery to help builders find stronger matches faster.',
         'Built live hackathon discovery by scraping MLH and Devpost for active and upcoming events.'
