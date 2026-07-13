@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useLayoutEffect, useRef } from 'react';
-import { ensureScrollTriggerRegistered, gsap } from '@/lib/gsapPlugins';
+import { gsap } from '@/lib/gsapPlugins';
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -9,73 +9,98 @@ interface ScrollRevealProps {
   delay?: number;
   duration?: number;
   className?: string;
+  observeSelector?: string;
 }
+
+const REVEAL_ROOT_MARGIN = '0px 0px -8% 0px';
 
 export default function ScrollReveal({
   children,
   type = 'fade-up',
   delay = 0,
   duration = 1,
-  className = ''
+  className = '',
+  observeSelector
 }: ScrollRevealProps) {
   const elementRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const element = elementRef.current;
     if (!element) return;
-    if (!ensureScrollTriggerRegistered()) return;
 
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
       gsap.set(element, { opacity: 1, x: 0, y: 0 });
       return;
     }
 
-    const startProps: gsap.TweenVars = { opacity: 0 };
+    const hidden: gsap.TweenVars = { opacity: 0 };
 
-    // Subtler animations - reduced movement
     switch (type) {
       case 'fade-up':
-        startProps.y = 20;
+        hidden.y = 20;
         break;
       case 'slide-left':
-        startProps.x = -20;
+        hidden.x = -20;
         break;
       case 'slide-right':
-        startProps.x = 20;
+        hidden.x = 20;
         break;
       case 'fade-in':
       default:
         break;
     }
 
-    const animation = gsap.fromTo(
-      element,
-      startProps,
-      {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        duration: duration * 0.6, // Faster, subtler
-        delay,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
-          invalidateOnRefresh: true
+    gsap.set(element, hidden);
+
+    const revealVars: gsap.TweenVars = {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      duration: duration * 0.6,
+      delay,
+      ease: 'power2.out'
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            gsap.to(element, revealVars);
+          } else if (entry.boundingClientRect.top > 0) {
+            gsap.to(element, { ...hidden, duration: 0.2, delay: 0, ease: 'power2.in' });
+          }
         }
-      }
+      },
+      { rootMargin: REVEAL_ROOT_MARGIN, threshold: 0 }
     );
 
-    return () => {
-      animation.scrollTrigger?.kill();
-      animation.kill();
+    let frame = 0;
+    let attempts = 0;
+
+    const attachObserver = () => {
+      const target = observeSelector ? element.querySelector(observeSelector) : element;
+
+      if (target) {
+        observer.observe(target);
+      } else if (attempts++ < 60) {
+        frame = requestAnimationFrame(attachObserver);
+      } else {
+        observer.observe(element);
+      }
     };
-  }, [type, delay, duration]);
+
+    attachObserver();
+
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      observer.disconnect();
+      gsap.killTweensOf(element);
+    };
+  }, [type, delay, duration, observeSelector]);
 
   return (
     <div ref={elementRef} className={className}>

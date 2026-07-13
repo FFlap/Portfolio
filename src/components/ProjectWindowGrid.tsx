@@ -30,7 +30,7 @@ export default function ProjectWindowGrid({ projects, idPrefix }: ProjectWindowG
             : 'object-cover opacity-90 transition-all duration-300 hover:scale-105 hover:opacity-100';
 
         return (
-          <ScrollReveal key={project.name} delay={index * 0.1}>
+          <ScrollReveal key={project.name} delay={(index % 3) * 0.08} observeSelector=".terminal-window">
             <DraggableTerminal
               id={`${idPrefix}-${project.slug}`}
               title={`~/projects/${project.slug}`}
