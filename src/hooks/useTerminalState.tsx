@@ -1,6 +1,8 @@
 'use client';
 
-import React, { createContext, useCallback, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useCallback, useContext, useRef, useState, ReactNode } from 'react';
+
+const BASE_TERMINAL_Z_INDEX = 10;
 
 export interface TerminalState {
   id: string;
@@ -8,6 +10,7 @@ export interface TerminalState {
   isMinimized: boolean;
   isClosed: boolean;
   isOpen: boolean;
+  zIndex: number;
 }
 
 interface TerminalContextType {
@@ -18,12 +21,35 @@ interface TerminalContextType {
   restoreTerminal: (id: string) => void;
   closeTerminal: (id: string) => void;
   openTerminal: (id: string) => void;
+  bringToFront: (id: string) => void;
 }
 
 const TerminalContext = createContext<TerminalContextType | undefined>(undefined);
 
 export function TerminalProvider({ children }: { children: ReactNode }) {
   const [terminals, setTerminals] = useState<Record<string, TerminalState>>({});
+  const nextZIndexRef = useRef(BASE_TERMINAL_Z_INDEX);
+
+  const allocateZIndex = useCallback(() => {
+    nextZIndexRef.current += 1;
+    return nextZIndexRef.current;
+  }, []);
+
+  const bringToFront = useCallback((id: string) => {
+    setTerminals((prev) => {
+      const terminal = prev[id];
+      if (!terminal) return prev;
+
+      const maxZ = Math.max(BASE_TERMINAL_Z_INDEX, ...Object.values(prev).map((t) => t.zIndex));
+      if (terminal.zIndex === maxZ) return prev;
+
+      const zIndex = allocateZIndex();
+      return {
+        ...prev,
+        [id]: { ...terminal, zIndex },
+      };
+    });
+  }, [allocateZIndex]);
 
   const registerTerminal = useCallback((id: string, title: string) => {
     setTerminals((prev) => {
@@ -37,10 +63,11 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
           isMinimized: false,
           isClosed: false,
           isOpen: true,
+          zIndex: allocateZIndex(),
         },
       };
     });
-  }, []);
+  }, [allocateZIndex]);
 
   const unregisterTerminal = useCallback((id: string) => {
     setTerminals((prev) => {
@@ -60,11 +87,25 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const restoreTerminal = useCallback((id: string) => {
-    setTerminals((prev) => ({
-      ...prev,
-      [id]: { ...prev[id], isMinimized: false, isClosed: false, isOpen: true },
-    }));
-  }, []);
+    setTerminals((prev) => {
+      const terminal = prev[id];
+      if (!terminal) return prev;
+
+      const maxZ = Math.max(BASE_TERMINAL_Z_INDEX, ...Object.values(prev).map((t) => t.zIndex));
+      const zIndex = terminal.zIndex === maxZ ? terminal.zIndex : allocateZIndex();
+
+      return {
+        ...prev,
+        [id]: {
+          ...terminal,
+          isMinimized: false,
+          isClosed: false,
+          isOpen: true,
+          zIndex,
+        },
+      };
+    });
+  }, [allocateZIndex]);
 
   const closeTerminal = useCallback((id: string) => {
     setTerminals((prev) => ({
@@ -74,11 +115,25 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const openTerminal = useCallback((id: string) => {
-    setTerminals((prev) => ({
-      ...prev,
-      [id]: { ...prev[id], isClosed: false, isMinimized: false, isOpen: true },
-    }));
-  }, []);
+    setTerminals((prev) => {
+      const terminal = prev[id];
+      if (!terminal) return prev;
+
+      const maxZ = Math.max(BASE_TERMINAL_Z_INDEX, ...Object.values(prev).map((t) => t.zIndex));
+      const zIndex = terminal.zIndex === maxZ ? terminal.zIndex : allocateZIndex();
+
+      return {
+        ...prev,
+        [id]: {
+          ...terminal,
+          isClosed: false,
+          isMinimized: false,
+          isOpen: true,
+          zIndex,
+        },
+      };
+    });
+  }, [allocateZIndex]);
 
   return (
     <TerminalContext.Provider
@@ -90,6 +145,7 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
         restoreTerminal,
         closeTerminal,
         openTerminal,
+        bringToFront,
       }}
     >
       {children}

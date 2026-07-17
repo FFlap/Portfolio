@@ -1,8 +1,33 @@
 'use client';
 
-import { useState, useRef, ReactNode, useEffect } from 'react';
+import { useState, useRef, ReactNode, useEffect, useLayoutEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Rnd } from 'react-rnd';
 import { useTerminalState } from '@/hooks/useTerminalState';
+
+const WINDOW_LAYER_ID = 'terminal-window-layer';
+
+function getWindowLayer(): HTMLElement | null {
+  if (typeof document === 'undefined') return null;
+
+  let layer = document.getElementById(WINDOW_LAYER_ID);
+  if (!layer) {
+    layer = document.createElement('div');
+    layer.id = WINDOW_LAYER_ID;
+    layer.style.cssText =
+      'position:absolute;top:0;left:0;width:100%;height:0;overflow:visible;pointer-events:none;z-index:40;';
+    document.body.appendChild(layer);
+  }
+  return layer;
+}
+
+function getDocumentPosition(el: HTMLElement) {
+  const rect = el.getBoundingClientRect();
+  return {
+    x: Math.round(rect.left + window.scrollX),
+    y: Math.round(rect.top + window.scrollY),
+  };
+}
 
 interface DraggableTerminalProps {
   id: string;
@@ -25,16 +50,20 @@ export default function DraggableTerminal({
 }: DraggableTerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const isDetachedRef = useRef(false);
+
   const [mounted, setMounted] = useState(false);
   const [isTouchLayout, setIsTouchLayout] = useState(false);
   const [initialSize, setInitialSize] = useState({ width: 0, height: 0 });
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isInteracting, setIsInteracting] = useState(false);
+  const [isDetached, setIsDetached] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [portalReady, setPortalReady] = useState(false);
   const previousState = useRef({ size, position });
 
-  const { registerTerminal, unregisterTerminal, minimizeTerminal, closeTerminal, terminals } = useTerminalState();
+  const { registerTerminal, unregisterTerminal, minimizeTerminal, closeTerminal, bringToFront, terminals } =
+    useTerminalState();
 
   useEffect(() => {
     registerTerminal(id, title);
@@ -44,6 +73,11 @@ export default function DraggableTerminal({
   }, [id, title, registerTerminal, unregisterTerminal]);
 
   const terminalState = terminals[id];
+  const zIndex = terminalState?.zIndex ?? 10;
+
+  useEffect(() => {
+    isDetachedRef.current = isDetached;
+  }, [isDetached]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -56,7 +90,11 @@ export default function DraggableTerminal({
     return () => mq.removeEventListener?.('change', update);
   }, []);
 
-  // Measure initial size after mount (use defaultHeight if provided)
+  useEffect(() => {
+    getWindowLayer();
+    setPortalReady(true);
+  }, []);
+
   useEffect(() => {
     if (contentRef.current && !mounted) {
       const rect = contentRef.current.getBoundingClientRect();
@@ -76,6 +114,36 @@ export default function DraggableTerminal({
     }
   }, [mounted, defaultHeight, minHeight, minWidth, capInitialHeightToViewport]);
 
+  useLayoutEffect(() => {
+    if (!mounted || isTouchLayout || isDetached) return;
+
+    const syncToPlaceholder = () => {
+      if (isDetachedRef.current) return;
+      const placeholder = containerRef.current;
+      if (!placeholder) return;
+      setPosition(getDocumentPosition(placeholder));
+    };
+
+    syncToPlaceholder();
+    const raf = requestAnimationFrame(syncToPlaceholder);
+    window.addEventListener('resize', syncToPlaceholder);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', syncToPlaceholder);
+    };
+  }, [mounted, isTouchLayout, isDetached, size.width, size.height]);
+
+  const handleFocus = useCallback(() => {
+    if (isTouchLayout) return;
+    bringToFront(id);
+  }, [isTouchLayout, bringToFront, id]);
+
+  const detach = useCallback(() => {
+    if (isTouchLayout || isDetachedRef.current) return;
+    setIsDetached(true);
+  }, [isTouchLayout]);
+
   const handleMaximize = () => {
     if (isTouchLayout) return;
 
@@ -83,23 +151,20 @@ export default function DraggableTerminal({
       setSize(previousState.current.size);
       setPosition(previousState.current.position);
       setIsMaximized(false);
-      setIsInteracting(false);
     } else {
       previousState.current = { size, position };
-      
-      // Calculate maximized size and position
-      const maxWidth = window.innerWidth - 100;
-      const maxHeight = window.innerHeight - 150;
-      
-      // Get container's position on screen to calculate offset
-      const containerRect = containerRef.current?.getBoundingClientRect();
-      const offsetX = containerRect ? -containerRect.left + 50 : 0;
-      const offsetY = containerRect ? -containerRect.top + 75 : 0;
-      
-      setSize({ width: maxWidth, height: maxHeight });
-      setPosition({ x: offsetX, y: offsetY });
+      detach();
+      bringToFront(id);
+
+      setSize({
+        width: window.innerWidth - 100,
+        height: window.innerHeight - 150,
+      });
+      setPosition({
+        x: Math.round(50 + window.scrollX),
+        y: Math.round(75 + window.scrollY),
+      });
       setIsMaximized(true);
-      setIsInteracting(true);
     }
   };
 
@@ -108,7 +173,6 @@ export default function DraggableTerminal({
     minimizeTerminal(id);
   };
 
-  // Before mount, render normally to measure
   if (!mounted) {
     return (
       <div
@@ -116,7 +180,6 @@ export default function DraggableTerminal({
         className="rounded-lg overflow-hidden font-mono text-sm md:text-base flex flex-col border border-zinc-700 shadow-xl"
         style={{ backgroundColor: '#252A30' }}
       >
-        {/* Terminal Header */}
         <div className="terminal-drag-handle bg-[#2a2f36] px-4 py-3 flex items-center gap-2 border-b border-zinc-700 cursor-grab active:cursor-grabbing select-none">
           <div className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all" onClick={() => closeTerminal(id)} title="Close"></div>
           <div
@@ -128,9 +191,7 @@ export default function DraggableTerminal({
           <div className="w-3 h-3 rounded-full bg-[#27c93f] hover:brightness-110 cursor-pointer transition-all" title="Maximize"></div>
           <span className="ml-2 text-neutral-500 text-xs font-mono">{title}</span>
         </div>
-        <div className="overflow-hidden">
-          {children}
-        </div>
+        <div className="overflow-hidden">{children}</div>
       </div>
     );
   }
@@ -150,94 +211,108 @@ export default function DraggableTerminal({
 
   if (terminalState?.isClosed) return null;
 
+  const usePortal = !isTouchLayout && portalReady;
+  const layer = usePortal ? getWindowLayer() : null;
+  const isHidden = Boolean(terminalState?.isMinimized);
+
+  const windowNode = (
+    <Rnd
+      size={size}
+      position={usePortal ? position : { x: 0, y: 0 }}
+      disableDragging={isTouchLayout || isHidden}
+      onDragStart={() => {
+        handleFocus();
+        detach();
+      }}
+      onDrag={(e, d) => {
+        setPosition({ x: Math.round(d.x), y: Math.round(d.y) });
+      }}
+      onDragStop={(e, d) => {
+        setPosition({ x: Math.round(d.x), y: Math.round(d.y) });
+      }}
+      onResizeStart={() => {
+        handleFocus();
+        detach();
+      }}
+      onResize={(e, direction, ref, delta, pos) => {
+        setSize({
+          width: ref.offsetWidth,
+          height: ref.offsetHeight,
+        });
+        if (direction.includes('top') || direction.includes('left')) {
+          setPosition({ x: Math.round(pos.x), y: Math.round(pos.y) });
+        }
+      }}
+      onResizeStop={(e, direction, ref, delta, pos) => {
+        setSize({
+          width: ref.offsetWidth,
+          height: ref.offsetHeight,
+        });
+        if (direction.includes('top') || direction.includes('left')) {
+          setPosition({ x: Math.round(pos.x), y: Math.round(pos.y) });
+        }
+      }}
+      minWidth={minWidth}
+      minHeight={minHeight}
+      dragHandleClassName="terminal-drag-handle"
+      enableResizing={isHidden ? false : resizeConfig}
+      className="terminal-window"
+      style={{
+        position: usePortal ? 'absolute' : 'relative',
+        zIndex: isTouchLayout ? undefined : zIndex,
+        visibility: isHidden ? 'hidden' : 'visible',
+        pointerEvents: isHidden ? 'none' : 'auto',
+        opacity: isHidden ? 0 : 1,
+      }}
+      onMouseDown={handleFocus}
+    >
+      <div
+        className="rounded-lg overflow-hidden font-mono text-sm md:text-base h-full flex flex-col border border-zinc-700 shadow-xl"
+        style={{ backgroundColor: '#252A30' }}
+      >
+        <div
+          className={`terminal-drag-handle bg-[#2a2f36] px-4 py-3 flex items-center gap-2 border-b border-zinc-700 select-none ${
+            isTouchLayout ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'
+          }`}
+          onDoubleClick={isTouchLayout ? undefined : handleMaximize}
+        >
+          <div
+            className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all"
+            onClick={() => closeTerminal(id)}
+            title="Close"
+          ></div>
+          <div
+            className={`w-3 h-3 rounded-full bg-[#ffbd2e] transition-all ${isTouchLayout ? 'cursor-default opacity-60' : 'cursor-pointer hover:brightness-110'}`}
+            onClick={handleMinimize}
+            title="Minimize"
+            aria-disabled={isTouchLayout}
+          ></div>
+          <div
+            className="w-3 h-3 rounded-full bg-[#27c93f] hover:brightness-110 cursor-pointer transition-all"
+            onClick={handleMaximize}
+            title={isMaximized ? 'Restore' : 'Maximize'}
+          ></div>
+          <span className="ml-2 text-neutral-500 text-xs font-mono">{title}</span>
+        </div>
+
+        <div className="flex-1 overflow-auto scrollbar-auto-hide">{children}</div>
+      </div>
+    </Rnd>
+  );
+
   return (
-    <div 
-      ref={containerRef} 
-      className={`relative transition-opacity duration-300 ${terminalState?.isMinimized ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} 
-      style={{ 
-        width: isInteracting ? initialSize.width : size.width, 
-        height: isInteracting ? initialSize.height : size.height,
+    <div
+      ref={containerRef}
+      className={`relative transition-opacity duration-300 ${
+        terminalState?.isMinimized ? 'opacity-0 pointer-events-none' : 'opacity-100'
+      } ${usePortal ? 'pointer-events-none' : ''}`}
+      style={{
+        width: size.width || initialSize.width,
+        height: size.height || initialSize.height,
         visibility: terminalState?.isMinimized ? 'hidden' : 'visible',
       }}
     >
-      <Rnd
-        size={size}
-        position={position}
-        disableDragging={isTouchLayout}
-        onDragStart={() => setIsInteracting(true)}
-        onDrag={(e, d) => {
-          setPosition({ x: d.x, y: d.y });
-        }}
-        onDragStop={(e, d) => {
-          setPosition({ x: d.x, y: d.y });
-        }}
-        onResizeStart={() => setIsInteracting(true)}
-        onResize={(e, direction, ref, delta, pos) => {
-          setSize({
-            width: ref.offsetWidth,
-            height: ref.offsetHeight,
-          });
-          // Only update position when resizing from top or left edges
-          if (direction.includes('top') || direction.includes('left')) {
-            setPosition(pos);
-          }
-        }}
-        onResizeStop={(e, direction, ref, delta, pos) => {
-          setSize({
-            width: ref.offsetWidth,
-            height: ref.offsetHeight,
-          });
-          // Only update position when resizing from top or left edges
-          if (direction.includes('top') || direction.includes('left')) {
-            setPosition(pos);
-          }
-        }}
-        minWidth={minWidth}
-        minHeight={minHeight}
-        dragHandleClassName="terminal-drag-handle"
-        enableResizing={resizeConfig}
-        className="terminal-window"
-        style={{
-          position: isInteracting && !isTouchLayout ? 'absolute' : 'relative',
-          zIndex: isInteracting && !isTouchLayout ? 50 : 'auto',
-        }}
-      >
-        <div
-          className="rounded-lg overflow-hidden font-mono text-sm md:text-base h-full flex flex-col border border-zinc-700 shadow-xl"
-          style={{ backgroundColor: '#252A30' }}
-        >
-          {/* Terminal Header - Drag Handle */}
-          <div 
-            className={`terminal-drag-handle bg-[#2a2f36] px-4 py-3 flex items-center gap-2 border-b border-zinc-700 select-none ${
-              isTouchLayout ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'
-            }`}
-            onDoubleClick={isTouchLayout ? undefined : handleMaximize}
-          >
-            <div 
-              className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-110 cursor-pointer transition-all"
-              onClick={() => closeTerminal(id)}
-              title="Close"
-            ></div>
-            <div 
-              className={`w-3 h-3 rounded-full bg-[#ffbd2e] transition-all ${isTouchLayout ? 'cursor-default opacity-60' : 'cursor-pointer hover:brightness-110'}`}
-              onClick={handleMinimize}
-              title="Minimize"
-              aria-disabled={isTouchLayout}
-            ></div>
-            <div 
-              className="w-3 h-3 rounded-full bg-[#27c93f] hover:brightness-110 cursor-pointer transition-all"
-              onClick={handleMaximize}
-              title={isMaximized ? "Restore" : "Maximize"}
-            ></div>
-            <span className="ml-2 text-neutral-500 text-xs font-mono">{title}</span>
-          </div>
-
-          {/* Terminal Body */}
-          <div className="flex-1 overflow-auto scrollbar-auto-hide">
-            {children}
-          </div>
-        </div>
-      </Rnd>
+      {usePortal && layer ? createPortal(windowNode, layer) : windowNode}
     </div>
   );
 }
