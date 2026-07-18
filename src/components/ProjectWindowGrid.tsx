@@ -27,10 +27,13 @@ export default function ProjectWindowGrid({ projects, idPrefix }: ProjectWindowG
           project.thumbnail && project.thumbnailBackground === 'white'
             ? 'relative h-40 w-full shrink-0 overflow-hidden border-b border-white/5 bg-white'
             : 'relative h-40 w-full shrink-0 overflow-hidden border-b border-white/5';
+        const defaultScale = project.thumbnailScale ?? (project.thumbnailFit === 'contain' ? 1.25 : 1);
+        const hoverScale = project.thumbnailScale ? project.thumbnailScale * 1.15 : (project.thumbnailFit === 'contain' ? 1.3 : 1.05);
+
         const previewClassName =
           project.thumbnail && project.thumbnailFit === 'contain'
-            ? 'object-contain p-1 scale-125 opacity-90 transition-all duration-300 hover:scale-[1.3] hover:opacity-100'
-            : 'object-cover opacity-90 transition-all duration-300 hover:scale-105 hover:opacity-100';
+            ? 'object-contain p-1 opacity-90 transition-all duration-300 [transform:scale(var(--thumb-scale))] hover:[transform:scale(var(--thumb-hover-scale))] hover:opacity-100'
+            : 'object-cover opacity-90 transition-all duration-300 [transform:scale(var(--thumb-scale))] hover:[transform:scale(var(--thumb-hover-scale))] hover:opacity-100';
 
         return (
           <div
@@ -59,6 +62,10 @@ export default function ProjectWindowGrid({ projects, idPrefix }: ProjectWindowG
                         sizes="(min-width: 1024px) 350px, (min-width: 768px) 50vw, 100vw"
                         unoptimized={isUnoptimizedPreview}
                         className={previewClassName}
+                        style={{
+                          '--thumb-scale': defaultScale,
+                          '--thumb-hover-scale': hoverScale,
+                        } as React.CSSProperties}
                       />
                     )}
                   </div>

@@ -41,6 +41,7 @@ import newBHackathonSwipeUi from '../../public/assets/newB/hackathonSwipeUi.png'
 import newBLogo from '../../public/assets/newB/newBlogo.png';
 import newBPeopleSwipeUi from '../../public/assets/newB/peopleSwipeUi.png';
 import newBProjectSwipeUi from '../../public/assets/newB/projectSwipeUi.png';
+import hackTheChangeLogo from '../../public/assets/blockbuddy/hackTheChangeLogo.png';
 
 export interface Experience {
   role: string;
@@ -62,6 +63,7 @@ export interface Project {
   thumbnail?: string | StaticImageData;
   thumbnailFit?: 'cover' | 'contain';
   thumbnailBackground?: 'default' | 'white';
+  thumbnailScale?: number;
   images: Array<string | StaticImageData>;
   video?: string;
 }
@@ -239,6 +241,10 @@ export const portfolioData = {
       ],
       repoUrl: 'https://github.com/FFlap/BlockBuddy',
       video: 'https://www.youtube.com/embed/uO3lSjInB1c',
+      thumbnail: hackTheChangeLogo,
+      thumbnailFit: 'contain',
+      thumbnailBackground: 'white',
+      thumbnailScale: 0.75,
       images: [
         blockbuddyDashboard,
         blockbuddyMap,
