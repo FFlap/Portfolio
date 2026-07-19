@@ -92,6 +92,8 @@ export default function DraggableTerminal({
 
   useEffect(() => {
     getWindowLayer();
+    // The portal target only exists after the component has mounted in the browser.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPortalReady(true);
   }, []);
 
@@ -217,6 +219,7 @@ export default function DraggableTerminal({
 
   const windowNode = (
     <Rnd
+      data-terminal-id={id}
       size={size}
       position={usePortal ? position : { x: 0, y: 0 }}
       disableDragging={isTouchLayout || isHidden}
