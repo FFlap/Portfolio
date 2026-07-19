@@ -1,24 +1,38 @@
 'use client';
 
-import { useState, useRef, ReactNode, useEffect, useLayoutEffect, useCallback } from 'react';
+import {
+  useState,
+  useRef,
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useSyncExternalStore,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { Rnd } from 'react-rnd';
 import { useTerminalState } from '@/hooks/useTerminalState';
 
 const WINDOW_LAYER_ID = 'terminal-window-layer';
+const TOUCH_LAYOUT_QUERY = '(max-width: 768px), (pointer: coarse)';
 
 function getWindowLayer(): HTMLElement | null {
   if (typeof document === 'undefined') return null;
+  return document.getElementById(WINDOW_LAYER_ID);
+}
 
-  let layer = document.getElementById(WINDOW_LAYER_ID);
-  if (!layer) {
-    layer = document.createElement('div');
-    layer.id = WINDOW_LAYER_ID;
-    layer.style.cssText =
-      'position:absolute;top:0;left:0;width:100%;height:0;overflow:visible;pointer-events:none;z-index:40;';
-    document.body.appendChild(layer);
-  }
-  return layer;
+function subscribeToTouchLayout(onChange: () => void) {
+  const mediaQuery = window.matchMedia(TOUCH_LAYOUT_QUERY);
+  mediaQuery.addEventListener('change', onChange);
+  return () => mediaQuery.removeEventListener('change', onChange);
+}
+
+function getTouchLayoutSnapshot() {
+  return window.matchMedia(TOUCH_LAYOUT_QUERY).matches;
+}
+
+function getServerTouchLayoutSnapshot() {
+  return false;
 }
 
 function getDocumentPosition(el: HTMLElement) {
@@ -53,14 +67,16 @@ export default function DraggableTerminal({
   const isDetachedRef = useRef(false);
 
   const [mounted, setMounted] = useState(false);
-  const [isTouchLayout, setIsTouchLayout] = useState(false);
-  const [initialSize, setInitialSize] = useState({ width: 0, height: 0 });
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDetached, setIsDetached] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
-  const [portalReady, setPortalReady] = useState(false);
   const previousState = useRef({ size, position });
+  const isTouchLayout = useSyncExternalStore(
+    subscribeToTouchLayout,
+    getTouchLayoutSnapshot,
+    getServerTouchLayoutSnapshot,
+  );
 
   const { registerTerminal, unregisterTerminal, minimizeTerminal, closeTerminal, bringToFront, terminals } =
     useTerminalState();
@@ -75,29 +91,7 @@ export default function DraggableTerminal({
   const terminalState = terminals[id];
   const zIndex = terminalState?.zIndex ?? 10;
 
-  useEffect(() => {
-    isDetachedRef.current = isDetached;
-  }, [isDetached]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const mq = window.matchMedia('(max-width: 768px), (pointer: coarse)');
-    const update = () => setIsTouchLayout(mq.matches);
-    update();
-
-    mq.addEventListener?.('change', update);
-    return () => mq.removeEventListener?.('change', update);
-  }, []);
-
-  useEffect(() => {
-    getWindowLayer();
-    // The portal target only exists after the component has mounted in the browser.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPortalReady(true);
-  }, []);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (contentRef.current && !mounted) {
       const rect = contentRef.current.getBoundingClientRect();
       const desiredHeight = defaultHeight ?? rect.height;
@@ -110,7 +104,6 @@ export default function DraggableTerminal({
 
       const width = Math.ceil(Math.max(minWidth, rect.width));
       const measuredSize = { width, height };
-      setInitialSize(measuredSize);
       setSize(measuredSize);
       setMounted(true);
     }
@@ -143,6 +136,7 @@ export default function DraggableTerminal({
 
   const detach = useCallback(() => {
     if (isTouchLayout || isDetachedRef.current) return;
+    isDetachedRef.current = true;
     setIsDetached(true);
   }, [isTouchLayout]);
 
@@ -213,7 +207,7 @@ export default function DraggableTerminal({
 
   if (terminalState?.isClosed) return null;
 
-  const usePortal = !isTouchLayout && portalReady;
+  const usePortal = !isTouchLayout;
   const layer = usePortal ? getWindowLayer() : null;
   const isHidden = Boolean(terminalState?.isMinimized);
 
@@ -310,8 +304,8 @@ export default function DraggableTerminal({
         terminalState?.isMinimized ? 'opacity-0 pointer-events-none' : 'opacity-100'
       } ${usePortal ? 'pointer-events-none' : ''}`}
       style={{
-        width: size.width || initialSize.width,
-        height: size.height || initialSize.height,
+        width: size.width,
+        height: size.height,
         visibility: terminalState?.isMinimized ? 'hidden' : 'visible',
       }}
     >

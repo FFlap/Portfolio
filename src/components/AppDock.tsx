@@ -2,43 +2,53 @@
 
 import { useTerminalState } from '@/hooks/useTerminalState';
 import { Terminal } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
+
+const TOUCH_LAYOUT_QUERY = '(max-width: 768px), (pointer: coarse)';
+
+function subscribeToTouchLayout(onChange: () => void) {
+  const mediaQuery = window.matchMedia(TOUCH_LAYOUT_QUERY);
+  mediaQuery.addEventListener('change', onChange);
+  return () => mediaQuery.removeEventListener('change', onChange);
+}
+
+function getTouchLayoutSnapshot() {
+  return window.matchMedia(TOUCH_LAYOUT_QUERY).matches;
+}
+
+function getServerTouchLayoutSnapshot() {
+  return true;
+}
 
 export default function AppDock() {
   const { terminals, restoreTerminal, minimizeTerminal } = useTerminalState();
-  const [isTouchLayout, setIsTouchLayout] = useState<boolean | null>(null);
+  const isTouchLayout = useSyncExternalStore(
+    subscribeToTouchLayout,
+    getTouchLayoutSnapshot,
+    getServerTouchLayoutSnapshot,
+  );
 
   const terminalList = Object.values(terminals).filter(t => !t.isClosed);
   const currentMinimizedCount = terminalList.filter(t => t.isMinimized).length;
 
   const [isHovered, setIsHovered] = useState(false);
   const [showIndicator, setShowIndicator] = useState(false);
-  const previousMinimizedCount = useRef(0);
+  const [previousMinimizedCount, setPreviousMinimizedCount] = useState(currentMinimizedCount);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const mq = window.matchMedia('(max-width: 768px), (pointer: coarse)');
-    const update = () => setIsTouchLayout(mq.matches);
-    update();
-
-    mq.addEventListener?.('change', update);
-    return () => mq.removeEventListener?.('change', update);
-  }, []);
-
-  useEffect(() => {
-    // If the number of minimized terminals increases, show the dock temporarily
-    if (currentMinimizedCount > previousMinimizedCount.current) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+  if (currentMinimizedCount !== previousMinimizedCount) {
+    setPreviousMinimizedCount(currentMinimizedCount);
+    if (currentMinimizedCount > previousMinimizedCount) {
       setShowIndicator(true);
-      const timer = setTimeout(() => setShowIndicator(false), 2500);
-      previousMinimizedCount.current = currentMinimizedCount;
-      return () => clearTimeout(timer);
     }
-    previousMinimizedCount.current = currentMinimizedCount;
-  }, [currentMinimizedCount]);
+  }
 
-  if (isTouchLayout !== false || terminalList.length === 0) return null;
+  useEffect(() => {
+    if (!showIndicator) return;
+    const timer = window.setTimeout(() => setShowIndicator(false), 2500);
+    return () => window.clearTimeout(timer);
+  }, [showIndicator, currentMinimizedCount]);
+
+  if (isTouchLayout || terminalList.length === 0) return null;
 
   const isVisible = isHovered || showIndicator || currentMinimizedCount > 0 && isHovered;
 

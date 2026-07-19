@@ -21,6 +21,19 @@ export default function AppShell({ children }: { children: ReactNode }) {
       {children}
       <ProjectModal />
       <AppDock />
+      <div
+        id="terminal-window-layer"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: 0,
+          overflow: 'visible',
+          pointerEvents: 'none',
+          zIndex: 40,
+        }}
+      />
     </>
   );
 }
