@@ -136,7 +136,10 @@ export default function Experience() {
       </div>
 
       <div className="max-w-5xl mx-auto w-full">
-        <ScrollReveal type="slide-left">
+        <ScrollReveal
+          type="slide-left"
+          observeSelector='[data-terminal-reveal-target="experience-terminal"]'
+        >
           <DraggableTerminal
             id="experience-terminal"
             minWidth={400}

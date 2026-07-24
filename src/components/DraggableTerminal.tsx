@@ -264,6 +264,7 @@ export default function DraggableTerminal({
       onMouseDown={handleFocus}
     >
       <div
+        data-terminal-reveal-target={id}
         className="rounded-lg overflow-hidden font-mono text-sm md:text-base h-full flex flex-col border border-zinc-700 shadow-xl"
         style={{ backgroundColor: '#252A30' }}
       >

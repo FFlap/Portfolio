@@ -167,7 +167,11 @@ export default function Hero() {
 
         {/* Terminal placeholder - reserves space but doesn't affect layout */}
         <div className="w-full md:w-7/12" style={{ height: 'auto' }}>
-          <ScrollReveal type="slide-right" delay={0.2}>
+          <ScrollReveal
+            type="slide-right"
+            delay={0.2}
+            observeSelector='[data-terminal-reveal-target="hero-terminal"]'
+          >
             <DraggableTerminal
               id="hero-terminal"
               minWidth={400}

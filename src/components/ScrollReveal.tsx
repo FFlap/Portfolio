@@ -18,7 +18,7 @@ export default function ScrollReveal({
   children,
   type = 'fade-up',
   delay = 0,
-  duration = 1,
+  duration = 0.8,
   className = '',
   observeSelector
 }: ScrollRevealProps) {
@@ -31,11 +31,6 @@ export default function ScrollReveal({
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
-      gsap.set(element, { opacity: 1, x: 0, y: 0 });
-      return;
-    }
 
     const hidden: gsap.TweenVars = { opacity: 0 };
 
@@ -54,24 +49,49 @@ export default function ScrollReveal({
         break;
     }
 
-    gsap.set(element, hidden);
-
     const revealVars: gsap.TweenVars = {
       opacity: 1,
       x: 0,
       y: 0,
-      duration: duration * 0.6,
+      duration,
       delay,
-      ease: 'power2.out'
+      ease: 'power3.out'
+    };
+
+    if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
+      let frame = 0;
+      let attempts = 0;
+
+      const showWithoutAnimation = () => {
+        const target = observeSelector ? document.querySelector(observeSelector) : element;
+        if (target) {
+          gsap.set(target, { opacity: 1, x: 0, y: 0 });
+        } else if (attempts++ < 60) {
+          frame = requestAnimationFrame(showWithoutAnimation);
+        }
+      };
+
+      showWithoutAnimation();
+      return () => {
+        if (frame) cancelAnimationFrame(frame);
+      };
+    }
+
+    let animationTarget: Element = element;
+    let isIntersecting = false;
+
+    const showTarget = () => {
+      gsap.to(animationTarget, revealVars);
     };
 
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
+          isIntersecting = entry.isIntersecting;
           if (entry.isIntersecting) {
-            gsap.to(element, revealVars);
+            showTarget();
           } else if (entry.boundingClientRect.top > 0) {
-            gsap.to(element, { ...hidden, duration: 0.2, delay: 0, ease: 'power2.in' });
+            gsap.to(animationTarget, { ...hidden, duration: 0.2, delay: 0, ease: 'power2.in' });
           }
         }
       },
@@ -82,23 +102,28 @@ export default function ScrollReveal({
     let attempts = 0;
 
     const attachObserver = () => {
-      const target = observeSelector ? element.querySelector(observeSelector) : element;
+      const target = observeSelector ? document.querySelector(observeSelector) : element;
 
       if (target) {
-        observer.observe(target);
+        animationTarget = target;
+        gsap.set(animationTarget, hidden);
+        if (isIntersecting) showTarget();
       } else if (attempts++ < 60) {
         frame = requestAnimationFrame(attachObserver);
       } else {
-        observer.observe(element);
+        animationTarget = element;
+        gsap.set(animationTarget, hidden);
+        if (isIntersecting) showTarget();
       }
     };
 
+    observer.observe(element);
     attachObserver();
 
     return () => {
       if (frame) cancelAnimationFrame(frame);
       observer.disconnect();
-      gsap.killTweensOf(element);
+      gsap.killTweensOf(animationTarget);
     };
   }, [type, delay, duration, observeSelector]);
 

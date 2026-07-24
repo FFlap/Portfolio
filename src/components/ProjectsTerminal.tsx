@@ -15,7 +15,10 @@ export default function ProjectsTerminal() {
   } = useTerminalCommands();
 
   return (
-    <ScrollReveal type="fade-in">
+    <ScrollReveal
+      type="fade-in"
+      observeSelector='[data-terminal-reveal-target="projects-terminal"]'
+    >
       <DraggableTerminal
         id="projects-terminal"
         title="~/projects"

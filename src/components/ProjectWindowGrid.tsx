@@ -41,7 +41,10 @@ export default function ProjectWindowGrid({ projects, idPrefix }: ProjectWindowG
             className="relative min-w-0"
             style={{ zIndex: terminals[terminalId]?.zIndex ?? 'auto' }}
           >
-            <ScrollReveal delay={(index % 3) * 0.08} observeSelector=".terminal-window">
+            <ScrollReveal
+              delay={(index % 3) * 0.08}
+              observeSelector={`[data-terminal-reveal-target="${terminalId}"]`}
+            >
               <DraggableTerminal
                 id={terminalId}
                 title={`~/projects/${project.slug}`}
