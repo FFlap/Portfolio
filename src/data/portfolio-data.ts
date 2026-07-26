@@ -88,22 +88,35 @@ export const portfolioData = {
     school: 'University of Alberta',
     degree: 'Bachelor of Science in Computer Science',
     location: 'Edmonton, Alberta',
-    period: 'Sep. 2023 – May 2027',
-    coursework: 'Data Structures and Algorithms, Linear Algebra, Digital Image Processing, Artificial Intelligence, Discrete Math, Statistics, Calculus'
+    period: 'Sep. 2023 – April 2027',
+    coursework: 'Data Structures and Algorithms, Operating Systems, Computer Networking, Security, Software Engineering, Artificial Intelligence, Computer Organization and Architecture'
   },
 
   experience: [
     {
-      role: 'Business Analyst',
+      role: 'Software Developer Intern',
+      company: 'StackDX',
+      location: 'Calgary, Alberta',
+      period: 'May 2026 – August 2026',
+      logo: stackdxLogo,
+      link: 'https://www.stackdx.com/',
+      description: [
+        'Re-architected StackAI’s RAG pipeline into a shared engine that enabled persistent, document-grounded conversations with configurable filtering and page-level source citations.',
+        'Expanded automated document processing across 5 document types by improving classification, page segmentation, and structured entity extraction from complex unstructured files.',
+        'Optimized large TIFF-to-PDF processing by replacing full-file buffering and image decoding with sequential streaming, reducing peak memory overhead by 69.8%.'
+      ]
+    },
+    {
+      role: 'Business Analyst Intern',
       company: 'StackDX',
       location: 'Calgary, Alberta',
       period: 'May 2025 – August 2025',
       logo: stackdxLogo,
       link: 'https://www.stackdx.com/',
       description: [
-        'Developed a user interface using C#, ASP.NET Razor, HTML, JavaScript, and CSS to display and interact with CSV-like files, allowing users to easily view, sort, and filter data in tables, charts, and reports. Handling over 900k previously unsupported files.',
+        'Developed a user interface using C#, ASP.NET Blazor, and JavaScript to display and interact with CSV-like files, allowing users to easily view, sort, and filter data in tables, charts, and reports. Handling over 900k previously unsupported files.',
         'Designed and implemented C# scripts to test and evaluate the performance of fine-tuned AI models, ensuring optimal classification accuracy and reliability for document processing tasks.',
-        'Achieved over 95% classification accuracy by developing and training multiple machine learning models to categorize document content, improving automated data processing and reliability'
+        'Achieved over 95% classification accuracy by developing and training multiple machine learning models to categorize document content, improving automated data processing and reliability.'
       ]
     },
     {
@@ -114,10 +127,9 @@ export const portfolioData = {
       logo: uofaLogo,
       link: 'https://www.ualberta.ca/',
       description: [
-        'Used AI to analyze toxicity of various comments in bug-tracking forums such as GitHub, StackOverflow, and Bugzilla',
+        'Used AI to analyze toxicity of various comments in bug-tracking forums such as GitHub, StackOverflow, and Bugzilla.',
         'Developed automated data processing and filtering pipelines in Python to enhance sentiment classification accuracy, eliminating noise, cleaning text, and organizing datasets to optimize AI-driven toxicity detection.',
-        'Analyzed and handled over 5 million comments to statistically identify trends in online toxicity',
-        'Under review publication of research paper to the ESEM 2025'
+        'Analyzed and handled over 5 million comments to statistically identify trends in online toxicity.'
       ]
     }
   ] as Experience[],

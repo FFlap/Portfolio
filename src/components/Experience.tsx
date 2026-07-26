@@ -27,7 +27,7 @@ export default function Experience() {
       <div className="relative">
         <div className="space-y-12">
           {experience.map((job, i) => (
-            <div key={job.company} className="relative pl-20">
+            <div key={`${job.company}-${job.role}`} className="relative pl-20">
               {/* Connecting Line to Next Node */}
               {i !== experience.length - 1 && (
                 <div
