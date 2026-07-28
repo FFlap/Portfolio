@@ -319,30 +319,8 @@ function ProjectModalContent({
 
       {/* Modal Content */}
       <div className="project-modal-scroll relative bg-[var(--bg-surface)] border border-white/10 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
-        <button
-          onClick={handleCopyLink}
-          aria-label="Copy project link"
-          title="Copy project link"
-          className={`absolute top-4 right-16 z-10 flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-200 ${
-            copyStatus === 'copied'
-              ? 'border-theme/50 bg-theme/15 text-theme'
-              : copyStatus === 'error'
-                ? 'border-red-400/40 bg-red-500/10 text-red-300'
-                : 'border-white/10 bg-white/5 text-neutral-400 hover:border-theme/40 hover:bg-theme/10 hover:text-theme'
-          }`}
-        >
-          <Share2 className="h-4.5 w-4.5" strokeWidth={1.8} />
-        </button>
-
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-4 text-neutral-400 hover:text-white z-10 p-2 transition-colors duration-200"
-        >
-          <X className="h-6 w-6" strokeWidth={1.8} />
-        </button>
-
         <div className="p-6 md:p-8">
-          <div className="mb-6 pr-24">
+          <div className="mb-6">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="mb-2">
@@ -363,6 +341,32 @@ function ProjectModalContent({
                   </h2>
                 </div>
                 <p className="text-theme font-mono" style={{ opacity: 0.8 }}>{project.tech}</p>
+              </div>
+
+              <div className="flex flex-shrink-0 items-center gap-2">
+                <button
+                  onClick={handleCopyLink}
+                  aria-label="Copy project link"
+                  title="Copy project link"
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-200 ${
+                    copyStatus === 'copied'
+                      ? 'border-theme/50 bg-theme/15 text-theme'
+                      : copyStatus === 'error'
+                        ? 'border-red-400/40 bg-red-500/10 text-red-300'
+                        : 'border-white/10 bg-white/5 text-neutral-400 hover:border-theme/40 hover:bg-theme/10 hover:text-theme'
+                  }`}
+                >
+                  <Share2 className="h-4.5 w-4.5" strokeWidth={1.8} />
+                </button>
+
+                <button
+                  onClick={handleClose}
+                  aria-label="Close"
+                  title="Close"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-400 transition-all duration-200 hover:text-white"
+                >
+                  <X className="h-6 w-6" strokeWidth={1.8} />
+                </button>
               </div>
             </div>
           </div>
@@ -438,14 +442,6 @@ function ProjectModalContent({
             ))}
           </ul>
 
-          <div className="flex justify-end">
-            <button
-              onClick={handleClose}
-              className="px-6 py-2 bg-white/5 hover:bg-white/10 text-[var(--text-primary)] rounded border border-white/10 transition-colors duration-200"
-            >
-              Close
-            </button>
-          </div>
         </div>
       </div>
     </div>
